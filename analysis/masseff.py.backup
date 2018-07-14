@@ -21,30 +21,30 @@ tracks,tracklable = Handle("vector<reco::Track>"),("displacedStandAloneMuons",""
 gen,genlable = Handle("vector<reco::GenParticle>"),("genParticles","","HLT")
 # open file (you can use 'edmFileUtil -d /store/whatever.root' to get the physical file name)
 
-rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/"
+#rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/tar/M_6_dM_1_mZD_15/"
 #with open('filelist/M_6_dM_1_mZD_15.txt') as f:
-with open('filelist/test.txt') as f:
-	rootfiles = f.readlines()
-rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-10000p23_" in x) ]
-rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-100002p3_" in x) ]
-rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-1000023_" in x) ]
-rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-10000230_" in x) ]
-rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-100002300_" in x) ]
-
-#rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/tar/"
-#
-#with open('filelist/tar_60_10_150.txt') as f:
-#	rootfiles2 = f.readlines()
-#rootfiles2 = [rootprefix+"M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles2 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
-#with open('filelist/tar_5p25_0p5_15.txt') as f:
-#	rootfiles3 = f.readlines()
-#rootfiles3 = [rootprefix+"M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles3 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
-#with open('filelist/tar_52p5_5_150.txt') as f:
-#	rootfiles4 = f.readlines()
-#rootfiles4 = [rootprefix+"M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles4 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
 #with open('filelist/tar_6_1_15.txt') as f:
-#	rootfiles1 = f.readlines()
-#rootfiles1 = [rootprefix+"M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles1 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
+#	rootfiles = f.readlines()
+#rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-10000p23_" in x) ]
+#rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-100002p3_" in x) ]
+#rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-1000023_" in x) ]
+#rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-10000230_" in x) ]
+#rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-100002300_" in x) ]
+
+rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/tar/"
+
+with open('filelist/tar_60_10_150.txt') as f:
+	rootfiles2 = f.readlines()
+rootfiles2 = [rootprefix+"M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles2 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
+with open('filelist/tar_5p25_0p5_15.txt') as f:
+	rootfiles3 = f.readlines()
+rootfiles3 = [rootprefix+"M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles3 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
+with open('filelist/tar_52p5_5_150.txt') as f:
+	rootfiles4 = f.readlines()
+rootfiles4 = [rootprefix+"M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles4 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
+with open('filelist/tar_6_1_15.txt') as f:
+	rootfiles1 = f.readlines()
+rootfiles1 = [rootprefix+"M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles1 if ("_AOD" in x and "_Wchi2-10000230_" in x)]
 #with open('lifetime/ctau300.txt') as f:
 #	rootfiles6 = f.readlines()
 #rootfiles6 = [rootprefix+"%s"%(x.strip()) for x in rootfiles6 if "_AOD" in x]
@@ -59,7 +59,7 @@ events1 = Events(rootfiles1)
 events2 = Events(rootfiles2)
 events3 = Events(rootfiles3)
 events4 = Events(rootfiles4)
-events5 = Events(rootfiles5)
+#events5 = Events(rootfiles5)
 #events6 = Events(rootfiles2)
 def setrange(h1,h2,h3,h4,h5=None):#,h6):
 	max1 = max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum()]) if h5 is None else max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum(),h5.GetMaximum()])#,h6.GetMaximum()])
@@ -291,7 +291,7 @@ def makehist(events):
 (hist_pt2,hist_eta2,hist_phi2,hist_vxy2,hist_vz2,hist_trigeff2,hist_recoeff2) = makehist(events2)
 (hist_pt3,hist_eta3,hist_phi3,hist_vxy3,hist_vz3,hist_trigeff3,hist_recoeff3) = makehist(events3)
 (hist_pt4,hist_eta4,hist_phi4,hist_vxy4,hist_vz4,hist_trigeff4,hist_recoeff4) = makehist(events4)
-(hist_pt5,hist_eta5,hist_phi5,hist_vxy5,hist_vz5,hist_trigeff5,hist_recoeff5) = makehist(events5)
+#(hist_pt5,hist_eta5,hist_phi5,hist_vxy5,hist_vz5,hist_trigeff5,hist_recoeff5) = makehist(events5)
 #(hist_pt6,hist_eta6,hist_phi6,hist_vxy6,hist_vz6,hist_trigeff6,hist_recoeff6) = makehist(events6)
 
 
@@ -305,17 +305,17 @@ def makehist(events):
 ##draw(hist_eff_denom)
 #draw(hist_trigeff1)
 #draw(hist_recoeff1)
-drawall(hist_pt1,hist_pt2,hist_pt3,hist_pt4,hist_pt5)#,hist_pt6)
-drawall(hist_eta1,hist_eta2,hist_eta3,hist_eta4,hist_eta5)#,hist_eta6)
-drawall(hist_phi1,hist_phi2,hist_phi3,hist_phi4,hist_phi5)#,hist_phi6)
-drawall(hist_vxy1,hist_vxy2,hist_vxy3,hist_vxy4,hist_vxy5)#,hist_vxy6)
-drawall(hist_vz1,hist_vz2,hist_vz3,hist_vz4,hist_vz5)#,hist_vz6)
-drawall(hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_trigeff4,hist_trigeff5)#,hist_trigeff6)
-drawall(hist_recoeff1,hist_recoeff2,hist_recoeff3,hist_recoeff4,hist_recoeff5)#,hist_recoeff6)
-#drawall(hist_pt1,hist_pt2,hist_pt3,hist_pt4,None)#,hist_pt6)
-#drawall(hist_eta1,hist_eta2,hist_eta3,hist_eta4,None)#,hist_eta6)
-#drawall(hist_phi1,hist_phi2,hist_phi3,hist_phi4,None)#,hist_phi6)
-#drawall(hist_vxy1,hist_vxy2,hist_vxy3,hist_vxy4,None)#,hist_vxy6)
-#drawall(hist_vz1,hist_vz2,hist_vz3,hist_vz4,None)#,hist_vz6)
-#drawall(hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_trigeff4,None)#,hist_trigeff6)
-#drawall(hist_recoeff1,hist_recoeff2,hist_recoeff3,hist_recoeff4,None)#,hist_recoeff6)
+#drawall(hist_pt1,hist_pt2,hist_pt3,hist_pt4,hist_pt5)#,hist_pt6)
+#drawall(hist_eta1,hist_eta2,hist_eta3,hist_eta4,hist_eta5)#,hist_eta6)
+#drawall(hist_phi1,hist_phi2,hist_phi3,hist_phi4,hist_phi5)#,hist_phi6)
+#drawall(hist_vxy1,hist_vxy2,hist_vxy3,hist_vxy4,hist_vxy5)#,hist_vxy6)
+#drawall(hist_vz1,hist_vz2,hist_vz3,hist_vz4,hist_vz5)#,hist_vz6)
+#drawall(hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_trigeff4,hist_trigeff5)#,hist_trigeff6)
+#drawall(hist_recoeff1,hist_recoeff2,hist_recoeff3,hist_recoeff4,hist_recoeff5)#,hist_recoeff6)
+drawall(hist_pt1,hist_pt2,hist_pt3,hist_pt4,None)#,hist_pt6)
+drawall(hist_eta1,hist_eta2,hist_eta3,hist_eta4,None)#,hist_eta6)
+drawall(hist_phi1,hist_phi2,hist_phi3,hist_phi4,None)#,hist_phi6)
+drawall(hist_vxy1,hist_vxy2,hist_vxy3,hist_vxy4,None)#,hist_vxy6)
+drawall(hist_vz1,hist_vz2,hist_vz3,hist_vz4,None)#,hist_vz6)
+drawall(hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_trigeff4,None)#,hist_trigeff6)
+drawall(hist_recoeff1,hist_recoeff2,hist_recoeff3,hist_recoeff4,None)#,hist_recoeff6)
