@@ -23,57 +23,106 @@ genmet,genmetlabel = Handle("vector<reco::GenMET>"),("genMetTrue","","HLT")
 genjet,genjetlabel = Handle("vector<reco::GenJet>"),("ak4GenJets","","HLT")
 met,metlabel = Handle("vector<reco::PFMET>"),("pfMet","","RECO")
 jet,jetlabel = Handle("vector<reco::PFJet>"),("ak4PFJets","","RECO")
+###############################################################################################################################
+#################Choose configuration to run
+###############################################################################################################################
+run_masses = False
+run_lifetimes12 = True
+run_lifetimes1000 = False
+
+
+
+##################################################################################################################
+################SETUP FILES FOR LIFETIME COMPARISON
+##################################################################################################################
 # open files 
+if run_lifetimes12:
+	mass_split = "5p25_dMchi-0p5_mZD-15"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau3_12/"
+	with open('filelist/ctau/ctau12_3.txt') as f:
+		rootfilesx = f.readlines()
+#	rootfilesx = rootfilesx[:40] + rootfilesx[246:270]+ rootfilesx[275:300] + rootfilesx[305:340] + rootfilesx[637:653]
+	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
+	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p20e-03_" in x) ]
+	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p01_" in x) ]
+	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p12_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p2_" in x) ]
+	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-12p0_" in x) ]
+	print rootfiles1	
+	print rootfiles2
+	print rootfiles3
+	print rootfiles4
+	print rootfiles5
+	events1 = Events(rootfiles1)
+	events2 = Events(rootfiles2)
+	events3 = Events(rootfiles3)
+	events4 = Events(rootfiles4)
+	events5 = Events(rootfiles5)
+if run_lifetimes1000:
+	mass_split = "5p25_dMchi-0p5_mZD-15"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_1000/"
+	with open('filelist/ctau/ctau1000.txt') as f:
+		rootfilesx = f.readlines()
+	rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
+	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
+	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p1_" in x) ]
+	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1_" in x) ]
+	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-10_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-100_" in x) ]
+	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1000_" in x) ]
+	print rootfiles1	
+	print rootfiles2
+	print rootfiles3
+	print rootfiles4
+	print rootfiles5
+	events1 = Events(rootfiles1)
+	events2 = Events(rootfiles2)
+	events3 = Events(rootfiles3)
+	events4 = Events(rootfiles4)
+	events5 = Events(rootfiles5)
+	
+###############################################################################################################
+############3SETUP FILES FOR MASS COMPARISON
+###############################################################################################################
+if run_masses:
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/"
+	
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_60_10_150.txt') as f:
+		rootfiles2 = f.readlines()
+	rootfiles2 = [rootprefix+"tar/M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles2 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_5p25_0p5_15.txt') as f:
+		rootfiles3 = f.readlines()
+	rootfiles3 = [rootprefix+"tar/M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles3 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_52p5_5_150.txt') as f:
+		rootfiles4 = f.readlines()
+	rootfiles4 = [rootprefix+"tar/M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles4 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_6_1_15.txt') as f:
+		rootfiles1 = f.readlines()
+	rootfiles1 = [rootprefix+"tar/M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles1 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_60_dM_10_mZD_150.txt') as f:
+		rootfiles5 = f.readlines()
+	rootfiles2 + [rootprefix+"M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles5 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_5p25_dM_0p5_mZD_15.txt') as f:
+		rootfiles6 = f.readlines()
+	rootfiles3 + [rootprefix+"M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles6 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_52p5_dM_5_mZD_150.txt') as f:
+		rootfiles7 = f.readlines()
+	rootfiles4 + [rootprefix+"M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles7 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_6_dM_1_mZD_15.txt') as f:
+		rootfiles8 = f.readlines()
+	rootfiles1 + [rootprefix+"M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles8 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
 
-#rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/tar/M_6_dM_1_mZD_15/"
-#with open('filelist/M_6_dM_1_mZD_15.txt') as f:
-#with open('filelist/tar_6_1_15.txt') as f:
-#	rootfiles = f.readlines()
-#rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-10000p23_" in x) ]
-#rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-100002p3_" in x) ]
-#rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-1000023_" in x) ]
-#rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-10000230_" in x) ]
-#rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_AOD" in x and "_Wchi2-100002300_" in x) ]
-
-rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/"
-
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_60_10_150.txt') as f:
-	rootfiles2 = f.readlines()
-rootfiles2 = [rootprefix+"tar/M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles2 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_5p25_0p5_15.txt') as f:
-	rootfiles3 = f.readlines()
-rootfiles3 = [rootprefix+"tar/M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles3 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_52p5_5_150.txt') as f:
-	rootfiles4 = f.readlines()
-rootfiles4 = [rootprefix+"tar/M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles4 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_6_1_15.txt') as f:
-	rootfiles1 = f.readlines()
-rootfiles1 = [rootprefix+"tar/M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles1 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_60_dM_10_mZD_150.txt') as f:
-	rootfiles5 = f.readlines()
-rootfiles2 + [rootprefix+"M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles5 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_5p25_dM_0p5_mZD_15.txt') as f:
-	rootfiles6 = f.readlines()
-rootfiles3 + [rootprefix+"M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles6 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_52p5_dM_5_mZD_150.txt') as f:
-	rootfiles7 = f.readlines()
-rootfiles4 + [rootprefix+"M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles7 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_6_dM_1_mZD_15.txt') as f:
-	rootfiles8 = f.readlines()
-rootfiles1 + [rootprefix+"M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles8 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-print rootfiles1
-print rootfiles2
-print rootfiles3
-print rootfiles4
-#print rootfiles5
-
-events1 = Events(rootfiles1)
-events2 = Events(rootfiles2)
-events3 = Events(rootfiles3)
-events4 = Events(rootfiles4)
-#events5 = Events(rootfiles5)
-def setrange(h1,h2,h3,h4,h5=None):#,h6):
+	print rootfiles1
+	print rootfiles2
+	print rootfiles3
+	print rootfiles4
+	events1 = Events(rootfiles1)
+	events2 = Events(rootfiles2)
+	events3 = Events(rootfiles3)
+	events4 = Events(rootfiles4)
+###################################################################################################################################################
+def setrange(h1,h2,h3,h4,h5=None):
 	max1 = max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum()]) if h5 is None else max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum(),h5.GetMaximum()])
 	min1 = min([h1.GetMinimum(),h2.GetMinimum(),h3.GetMinimum(),h4.GetMinimum()]) if h5 is None else min([h1.GetMinimum(),h2.GetMinimum(),h3.GetMinimum(),h4.GetMinimum(),h5.GetMinimum()])
 	h1.SetMaximum(max1*1.15)
@@ -88,8 +137,8 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 	c = ROOT.TCanvas("c","c",800,800)
 	c.cd
 	#format titles
-	name = "output/all_%s.png"%(hist1.GetName())
-	namepdf = "output/all_%s.pdf"%(hist1.GetName())
+	name = "outputlife3/all_%s.png"%(hist1.GetName())
+	namepdf = "outputlife3/all_%s.pdf"%(hist1.GetName())
 	xtitle = 'pt [GeV]' if ('pt' in name or 'eff' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
 	xtitle = xtitle if ('vertex' not in name) else ('dxy [cm]' if 'vxy' in name else ('dz [cm]' if 'vz' in name else 'v unknown'))
 	hist1.GetXaxis().SetTitle(xtitle)
@@ -103,7 +152,7 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		#setrange(hist01,hist1,hist10,hist50,hist100,hist300)
 	hist1.SetMaximum(1.0)
 	hist1.SetMinimum(0.0)
-	hist1.GetYaxis().SetTitle("Efficiency")
+	#hist1.GetYaxis().SetTitle("Efficiency")
 	hist1.SetMarkerColorAlpha(2,.6)
 	hist2.SetMarkerColorAlpha(3,.6)
 	hist3.SetMarkerColorAlpha(4,.6)
@@ -119,6 +168,7 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		hist5.SetMarkerStyle(8)
 	if 'eff' in name:
 		print "eff: ",name 		
+		hist1.GetYaxis().SetTitle("Efficiency")
 		hist1.Draw('E1')
 		hist2.Draw('E1 Same')
 		hist3.Draw('E1 Same')
@@ -127,6 +177,14 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 			hist5.Draw('E1 Same')
 	if 'eff' not in name:
 		print "not eff: ", name 		
+		hist1.GetYaxis().SetTitle("Counts (normalized)")	
+		norm(hist1)
+		norm(hist2)
+		norm(hist3)
+		norm(hist4)
+		if hist5 is not None:
+			norm(hist5)
+		setrange(hist1,hist2,hist3,hist4) if hist5 is None else setrange(hist1,hist2,hist3,hist4,hist5)
 		hist1.Draw('HIST')
 		hist2.Draw('HIST Same')
 		hist3.Draw('HIST Same')
@@ -169,8 +227,8 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 def draw(histogram):
 	c = ROOT.TCanvas("c","c",800,800)
 	c.cd
-	name = "output/%s.png"%(histogram.GetName())
-	namepdf = "output/%s.pdf"%(histogram.GetName())
+	name = "outputlife3/%s.png"%(histogram.GetName())
+	namepdf = "outputlife3/%s.pdf"%(histogram.GetName())
 	xtitle = 'pt [GeV]' if ('pt' in name or 'eff' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
 	xtitle = xtitle if ('vertex' not in name) else ('dxy [cm]' if 'vxy' in name else ('dz [cm]' if 'vz' in name else 'v unknown'))
 	histogram.GetXaxis().SetTitle(xtitle)
@@ -418,40 +476,41 @@ def makehist(events):
 (hist_pt_met2,hist_eta_met2,hist_phi_met2,hist_pt_jet2,hist_eta_jet2,hist_phi_jet2,hist_pt_mu2,hist_eta_mu2,hist_phi_mu2,hist_vxy_mu2,hist_vz_mu2,hist_trigeffmet2,hist_trigeffdca2,hist_trigeffdz2,hist_recoeff_mu2,hist_recoeff_met2) = makehist(events2)
 (hist_pt_met3,hist_eta_met3,hist_phi_met3,hist_pt_jet3,hist_eta_jet3,hist_phi_jet3,hist_pt_mu3,hist_eta_mu3,hist_phi_mu3,hist_vxy_mu3,hist_vz_mu3,hist_trigeffmet3,hist_trigeffdca3,hist_trigeffdz3,hist_recoeff_mu3,hist_recoeff_met3) = makehist(events3)
 (hist_pt_met4,hist_eta_met4,hist_phi_met4,hist_pt_jet4,hist_eta_jet4,hist_phi_jet4,hist_pt_mu4,hist_eta_mu4,hist_phi_mu4,hist_vxy_mu4,hist_vz_mu4,hist_trigeffmet4,hist_trigeffdca4,hist_trigeffdz4,hist_recoeff_mu4,hist_recoeff_met4) = makehist(events4)
-#(hist_pt5,hist_eta5,hist_phi5,hist_vxy5,hist_vz5,hist_trigeff5,hist_recoeff5) = makehist(events5)
-#(hist_pt6,hist_eta6,hist_phi6,hist_vxy6,hist_vz6,hist_trigeff6,hist_recoeff6) = makehist(events6)
 
+if run_lifetimes12 or run_lifetimes1000:
+	(hist_pt_met5,hist_eta_met5,hist_phi_met5,hist_pt_jet5,hist_eta_jet5,hist_phi_jet5,hist_pt_mu5,hist_eta_mu5,hist_phi_mu5,hist_vxy_mu5,hist_vz_mu5,hist_trigeffmet5,hist_trigeffdca5,hist_trigeffdz5,hist_recoeff_mu5,hist_recoeff_met5) = makehist(events5)
 
-#draw(hist_pt1)
-#draw(hist_pt5)
-#draw(hist_eta1)
-#draw(hist_phi1)
-#draw(hist_vxy1)
-#draw(hist_vz1)
-##draw(hist_eff_num)
-##draw(hist_eff_denom)
-#draw(hist_trigeff1)
-#draw(hist_recoeff1)
-#drawall(hist_pt1,hist_pt2,hist_pt3,hist_pt4,hist_pt5)#,hist_pt6)
-#drawall(hist_eta1,hist_eta2,hist_eta3,hist_eta4,hist_eta5)#,hist_eta6)
-#drawall(hist_phi1,hist_phi2,hist_phi3,hist_phi4,hist_phi5)#,hist_phi6)
-#drawall(hist_vxy1,hist_vxy2,hist_vxy3,hist_vxy4,hist_vxy5)#,hist_vxy6)
-#drawall(hist_vz1,hist_vz2,hist_vz3,hist_vz4,hist_vz5)#,hist_vz6)
-#drawall(hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_trigeff4,hist_trigeff5)#,hist_trigeff6)
-#drawall(hist_recoeff1,hist_recoeff2,hist_recoeff3,hist_recoeff4,hist_recoeff5)#,hist_recoeff6)
-drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,None)#,hist_pt6)
-drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,None)#,hist_eta6)
-drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,None)#,hist_phi6)
-drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,None)#,hist_pt6)
-drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,None)#,hist_eta6)
-drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,None)#,hist_phi6)
-drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,None)#,hist_pt6)
-drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,None)#,hist_eta6)
-drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,None)#,hist_phi6)
-drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,None)#,hist_vxy6)
-drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,None)#,hist_vz6)
-drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,None)#,hist_trigeff6)
-drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,None)#,hist_trigeff6)
-drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,None)#,hist_trigeff6)
-drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,None)#,hist_recoeff6)
-drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,None)#,hist_recoeff6)
+	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,hist_pt_met5)
+	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,hist_eta_met5)
+	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,hist_phi_met5)
+	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,hist_pt_jet5)
+	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,hist_eta_jet5)
+	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,hist_phi_jet5)
+	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,hist_pt_mu5)
+	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,hist_eta_mu5)
+	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,hist_phi_mu5)
+	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,hist_vxy_mu5)
+	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,hist_vz_mu5)
+	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,hist_trigeffmet5)
+	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,hist_trigeffdca5)
+	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,hist_trigeffdz5)
+	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,hist_recoeff_mu5)
+	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,hist_recoeff_met5)
+
+else:
+	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,None)
+	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,None)
+	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,None)
+	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,None)
+	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,None)
+	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,None)
+	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,None)
+	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,None)
+	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,None)
+	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,None)
+	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,None)
+	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,None)
+	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,None)
+	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,None)
+	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,None)
+	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,None)
