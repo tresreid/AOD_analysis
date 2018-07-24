@@ -27,8 +27,8 @@ jet,jetlabel = Handle("vector<reco::PFJet>"),("ak4PFJets","","RECO")
 #################Choose configuration to run
 ###############################################################################################################################
 run_masses = False
-run_lifetimes12 = True
-run_lifetimes1000 = False
+run_lifetimes12 = False
+run_lifetimes1000 = True
 
 
 
@@ -59,11 +59,11 @@ if run_lifetimes12:
 	events4 = Events(rootfiles4)
 	events5 = Events(rootfiles5)
 if run_lifetimes1000:
-	mass_split = "5p25_dMchi-0p5_mZD-15"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_1000/"
-	with open('filelist/ctau/ctau1000.txt') as f:
+	mass_split = "52p5_dMchi-5_"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone2/"
+	with open('filelist/ctau/redone2.txt') as f:
 		rootfilesx = f.readlines()
-	rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
+	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
 	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
 	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p1_" in x) ]
 	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1_" in x) ]
@@ -80,38 +80,21 @@ if run_lifetimes1000:
 	events3 = Events(rootfiles3)
 	events4 = Events(rootfiles4)
 	events5 = Events(rootfiles5)
-	
+	savedir = "output/lifetimes/"
 ###############################################################################################################
 ############3SETUP FILES FOR MASS COMPARISON
 ###############################################################################################################
 if run_masses:
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/"
-	
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_60_10_150.txt') as f:
-		rootfiles2 = f.readlines()
-	rootfiles2 = [rootprefix+"tar/M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles2 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_5p25_0p5_15.txt') as f:
-		rootfiles3 = f.readlines()
-	rootfiles3 = [rootprefix+"tar/M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles3 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_52p5_5_150.txt') as f:
-		rootfiles4 = f.readlines()
-	rootfiles4 = [rootprefix+"tar/M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles4 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/tar_6_1_15.txt') as f:
-		rootfiles1 = f.readlines()
-	rootfiles1 = [rootprefix+"tar/M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles1 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_60_dM_10_mZD_150.txt') as f:
-		rootfiles5 = f.readlines()
-	rootfiles2 + [rootprefix+"M_60_dM_10_mZD_150/%s"%(x.strip()) for x in rootfiles5 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_5p25_dM_0p5_mZD_15.txt') as f:
-		rootfiles6 = f.readlines()
-	rootfiles3 + [rootprefix+"M_5p25_dM_0p5_mZD_15/%s"%(x.strip()) for x in rootfiles6 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_52p5_dM_5_mZD_150.txt') as f:
-		rootfiles7 = f.readlines()
-	rootfiles4 + [rootprefix+"M_52p5_dM_5_mZD_150/%s"%(x.strip()) for x in rootfiles7 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
-	with open('/uscms/home/mreid/gridpacks/analysis/filelist/M_6_dM_1_mZD_15.txt') as f:
-		rootfiles8 = f.readlines()
-	rootfiles1 + [rootprefix+"M_6_dM_1_mZD_15/%s"%(x.strip()) for x in rootfiles8 if ("_AOD" in x)]# and "_Wchi2-100002300_" in x)]
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone2/"
+	lifetime = "ctau-10_"
+	with open('filelist/ctau/redone2.txt') as f:
+		rootfilesx = f.readlines()
+	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
+	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and lifetime in x)]
+	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-5_" in x) ]
+	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-20_" in x) ]
+	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-5p25_dMchi-0p5_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-5p25_dMchi-2p0_" in x) ]
 
 	print rootfiles1
 	print rootfiles2
@@ -121,6 +104,7 @@ if run_masses:
 	events2 = Events(rootfiles2)
 	events3 = Events(rootfiles3)
 	events4 = Events(rootfiles4)
+	savedir = "output/masses/"
 ###################################################################################################################################################
 def setrange(h1,h2,h3,h4,h5=None):
 	max1 = max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum()]) if h5 is None else max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum(),h5.GetMaximum()])
@@ -137,10 +121,11 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 	c = ROOT.TCanvas("c","c",800,800)
 	c.cd
 	#format titles
-	name = "outputlife3/all_%s.png"%(hist1.GetName())
-	namepdf = "outputlife3/all_%s.pdf"%(hist1.GetName())
-	xtitle = 'pt [GeV]' if ('pt' in name or 'eff' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
+	name = savedir+"all_%s.png"%(hist1.GetName())
+	namepdf = savedir+"all_%s.pdf"%(hist1.GetName())
+	xtitle = 'pt [GeV]' if ('pt' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
 	xtitle = xtitle if ('vertex' not in name) else ('dxy [cm]' if 'vxy' in name else ('dz [cm]' if 'vz' in name else 'v unknown'))
+	xtitle = xtitle if ('eff' not in name) else ('MET pt [GeV]' if 'met' in name else ('Mu pt [GeV]' if 'mu' in name else 'eff unknown'))
 	hist1.GetXaxis().SetTitle(xtitle)
 
 	hist1.SetLineColor(2)
@@ -150,8 +135,8 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 	if (hist5 is not None):
 		hist5.SetLineColor(6)
 		#setrange(hist01,hist1,hist10,hist50,hist100,hist300)
-	hist1.SetMaximum(1.0)
-	hist1.SetMinimum(0.0)
+	#hist1.SetMaximum(1.0)
+	#hist1.SetMinimum(0.0)
 	#hist1.GetYaxis().SetTitle("Efficiency")
 	hist1.SetMarkerColorAlpha(2,.6)
 	hist2.SetMarkerColorAlpha(3,.6)
@@ -168,6 +153,8 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		hist5.SetMarkerStyle(8)
 	if 'eff' in name:
 		print "eff: ",name 		
+		hist1.SetMaximum(1.0)
+		hist1.SetMinimum(0.0)
 		hist1.GetYaxis().SetTitle("Efficiency")
 		hist1.Draw('E1')
 		hist2.Draw('E1 Same')
@@ -176,7 +163,11 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		if hist5 is not None:
 			hist5.Draw('E1 Same')
 	if 'eff' not in name:
-		print "not eff: ", name 		
+		print "not eff: ", name 
+		if 'vxy' in name:
+			c.SetLogy(1)
+		else:
+			c.SetLogy(0)		
 		hist1.GetYaxis().SetTitle("Counts (normalized)")	
 		norm(hist1)
 		norm(hist2)
@@ -191,20 +182,6 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		hist4.Draw('HIST Same')
 		if hist5 is not None:
 			hist5.Draw('HIST Same')
-#	else:
-#		norm(hist1)
-#		norm(hist2)
-#		norm(hist3)
-#		norm(hist4)
-#		if hist5 is not None:
-#			norm(hist5)
-#		setrange(hist01,hist1,hist10,hist100) if hist1000 is None else setrange(hist01,hist1,hist10,hist100,hist1000)#,hist300)
-#		hist01.Draw('HIST')
-#		hist1.Draw('HIST SAME')
-#		hist10.Draw('HIST SAME')
-#		hist100.Draw('HIST SAME')
-#		if hist1000 is not None:
-#			 hist1000.Draw('HIST SAME')
 
 	if hist5 is not None:
 		leg = ROOT.TLegend(.75,.75,.95,.95)
@@ -215,20 +192,21 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		leg.AddEntry(hist5,"1000 cm","f")
 	else:
 		leg = ROOT.TLegend(.75,.75,.95,.95)
-		leg.AddEntry(hist1,"M=6+/-1 .5","f")
-		leg.AddEntry(hist2,"M=60 +/- 5","f")
-		leg.AddEntry(hist3,"M=5.25 +/- 0.25 ","f")
-		leg.AddEntry(hist4,"M=52.5 +/- 2.5","f")
+		leg.AddEntry(hist1,"M=52.5+/- 5","f")
+		leg.AddEntry(hist2,"M=52.5 +/- 20","f")
+		leg.AddEntry(hist3,"M=5.25 +/- 0.5","f")
+		leg.AddEntry(hist4,"M=5.25 +/- 2.0","f")
 	leg.Draw()
 	c.Update()
 	c.SaveAs(name)
 	c.SaveAs(namepdf)
 	del c
+
 def draw(histogram):
 	c = ROOT.TCanvas("c","c",800,800)
 	c.cd
-	name = "outputlife3/%s.png"%(histogram.GetName())
-	namepdf = "outputlife3/%s.pdf"%(histogram.GetName())
+	name = savedir+"%s.png"%(histogram.GetName())
+	namepdf = savedir+"%s.pdf"%(histogram.GetName())
 	xtitle = 'pt [GeV]' if ('pt' in name or 'eff' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
 	xtitle = xtitle if ('vertex' not in name) else ('dxy [cm]' if 'vxy' in name else ('dz [cm]' if 'vz' in name else 'v unknown'))
 	histogram.GetXaxis().SetTitle(xtitle)
@@ -242,27 +220,39 @@ def draw(histogram):
 
 def makehist(events):
 	# SET UP HISTOGRAMS
-	hist_pt_met = ROOT.TH1F("histptmet","gen MET pt", 100,0,200)
-	hist_eta_met = ROOT.TH1F("histetamet","gen Met eta", 40,-6,6)
-	hist_phi_met = ROOT.TH1F("histphimet","gen Met phi", 40,-6,6)
-	hist_pt_jet = ROOT.TH1F("histptjet","gen Jet pt", 100,0,100)
-	hist_eta_jet = ROOT.TH1F("histetajet","gen Jet eta", 40,-6,6)
-	hist_phi_jet = ROOT.TH1F("histphijet","gen Jet phi", 40,-6,6)
-	hist_pt_mu = ROOT.TH1F("histptmu","gen Mu pt", 100,0,50)
-	hist_eta_mu = ROOT.TH1F("histetamu","gen Mu eta", 40,-6,6)
-	hist_phi_mu = ROOT.TH1F("histphimu","gen Mu phi", 40,-6,6)
-	hist_vxy_mu = ROOT.TH1F("histvertexvxymu","gen Mu vxy", 50,0,0.6)
-	hist_vz_mu = ROOT.TH1F("histvertexvzmu","gen Mu vz", 50,-10,10)
-	hist_trigeff_denom1 = ROOT.TH1F("histtrigeffdenom1","trigeff denominator", 50,120,200)
-	hist_trigeff_num1 = ROOT.TH1F("histtrigeffnum1","trigefficiency HLT_PFMET120_PFMHT120", 50,120,200)
-	hist_trigeff_denom2 = ROOT.TH1F("histtrigeffdenom2","trigeff denominator", 50,0,80)
-	hist_trigeff_num2 = ROOT.TH1F("histtrigeffnum2","trigefficiency HLT_DoubleMu3_DCA_PFMET50_PFMHT60", 50,0,80)
-	hist_trigeff_denom3 = ROOT.TH1F("histtrigeffdenom3","trigeff denominator", 50,0,80)
-	hist_trigeff_num3 = ROOT.TH1F("histtrigeffnum3","trigefficiency HLT_DoubleMu3_DZ_PFMET50_PFMHT60", 50,0,80)
-	hist_recoeff_denom_mu = ROOT.TH1F("histrecoeffdenommu","recoeff mu denominator", 50,0,50)
-	hist_recoeff_num_mu = ROOT.TH1F("histrecoeffnummu","recoefficiency mu", 50,0,50)
+	hist_pt_met = ROOT.TH1F("histptmet","gen leading MET pt", 100,0,200)
+	hist_eta_met = ROOT.TH1F("histetamet","gen leading Met eta", 40,-6,6)
+	hist_phi_met = ROOT.TH1F("histphimet","gen leading Met phi", 40,-6,6)
+	hist_pt_jet = ROOT.TH1F("histptjet","gen leading Jet pt", 100,0,100)
+	hist_eta_jet = ROOT.TH1F("histetajet","gen leading Jet eta", 40,-6,6)
+	hist_phi_jet = ROOT.TH1F("histphijet","gen leading Jet phi", 40,-6,6)
+	hist_pt_mu = ROOT.TH1F("histptmu","gen leading Mu pt", 100,0,25)
+	hist_eta_mu = ROOT.TH1F("histetamu","gen leading Mu eta", 40,-6,6)
+	hist_phi_mu = ROOT.TH1F("histphimu","gen leading Mu phi", 40,-6,6)
+	hist_vxy_mu = ROOT.TH1F("histvertexvxymu","gen leading Mu vxy", 100,0,0.3)
+	hist_vz_mu = ROOT.TH1F("histvertexvzmu","gen leading Mu vz", 50,-15,15)
+	hist_pt_musub = ROOT.TH1F("histptmusub","gen subleading Mu pt", 100,0,15)
+	hist_eta_musub = ROOT.TH1F("histetamusub","gen subleading Mu eta", 40,-6,6)
+	hist_phi_musub = ROOT.TH1F("histphimusub","gen subleading Mu phi", 40,-6,6)
+	hist_vxy_musub = ROOT.TH1F("histvertexvxymusub","gen subleading Mu vxy", 100,0,0.15)
+	hist_vz_musub = ROOT.TH1F("histvertexvzmusub","gen subleading Mu vz", 50,-15,15)
+	hist_trigeff_denom1mu = ROOT.TH1F("histtrigeffdenom1mu","trigeff denominator", 50,0,80)
+	hist_trigeff_num1mu = ROOT.TH1F("histtrigeffnum1mu","trigefficiency HLT_PFMET120_PFMHT120", 50,0,80)
+	hist_trigeff_denom2mu = ROOT.TH1F("histtrigeffdenom2mu","trigeff denominator", 50,0,80)
+	hist_trigeff_num2mu = ROOT.TH1F("histtrigeffnum2mu","trigefficiency HLT_DoubleMu3_DCA_PFMET50_PFMHT60", 50,0,80)
+	hist_trigeff_denom3mu = ROOT.TH1F("histtrigeffdenom3mu","trigeff denominator", 50,0,80)
+	hist_trigeff_num3mu = ROOT.TH1F("histtrigeffnum3mu","trigefficiency HLT_DoubleMu3_DZ_PFMET50_PFMHT60", 50,0,80)
+	hist_trigeff_denom1met = ROOT.TH1F("histtrigeffdenom1met","trigeff denominator", 50,120,200)
+	hist_trigeff_num1met = ROOT.TH1F("histtrigeffnum1met","trigefficiency HLT_PFMET120_PFMHT120", 50,120,200)
+	hist_trigeff_denom2met = ROOT.TH1F("histtrigeffdenom2met","trigeff denominator", 50,50,200)
+	hist_trigeff_num2met = ROOT.TH1F("histtrigeffnum2met","trigefficiency HLT_DoubleMu3_DCA_PFMET50_PFMHT60", 50,50,200)
+	hist_trigeff_denom3met = ROOT.TH1F("histtrigeffdenom3met","trigeff denominator", 50,50,200)
+	hist_trigeff_num3met = ROOT.TH1F("histtrigeffnum3met","trigefficiency HLT_DoubleMu3_DZ_PFMET50_PFMHT60", 50,50,200)
+	hist_recoeff_denom_mu = ROOT.TH1F("histrecoeffdenommumet","recoeff mu denominator", 50,0,50)
+	hist_recoeff_num_mu = ROOT.TH1F("histrecoeffnummumet","recoefficiency mu", 50,0,50)
 	hist_recoeff_denom_met = ROOT.TH1F("histrecoeffdenommet","recoeff met denominator", 50,0,200)
 	hist_recoeff_num_met = ROOT.TH1F("histrecoeffnummet","recoefficiency met", 50,0,200)
+
 	hist_pt_met.Sumw2()
 	hist_eta_met.Sumw2()
 	hist_phi_met.Sumw2()
@@ -274,12 +264,23 @@ def makehist(events):
 	hist_phi_mu.Sumw2()
 	hist_vxy_mu.Sumw2()
 	hist_vz_mu.Sumw2()
-	hist_trigeff_denom1.Sumw2()
-	hist_trigeff_num1.Sumw2()
-	hist_trigeff_denom2.Sumw2()
-	hist_trigeff_num2.Sumw2()
-	hist_trigeff_denom3.Sumw2()
-	hist_trigeff_num3.Sumw2()
+	hist_pt_musub.Sumw2()
+	hist_eta_musub.Sumw2()
+	hist_phi_musub.Sumw2()
+	hist_vxy_musub.Sumw2()
+	hist_vz_musub.Sumw2()
+	hist_trigeff_denom1mu.Sumw2()
+	hist_trigeff_num1mu.Sumw2()
+	hist_trigeff_denom2mu.Sumw2()
+	hist_trigeff_num2mu.Sumw2()
+	hist_trigeff_denom3mu.Sumw2()
+	hist_trigeff_num3mu.Sumw2()
+	hist_trigeff_denom1met.Sumw2()
+	hist_trigeff_num1met.Sumw2()
+	hist_trigeff_denom2met.Sumw2()
+	hist_trigeff_num2met.Sumw2()
+	hist_trigeff_denom3met.Sumw2()
+	hist_trigeff_num3met.Sumw2()
 	hist_recoeff_denom_mu.Sumw2()
 	hist_recoeff_num_mu.Sumw2()
 	hist_recoeff_denom_met.Sumw2()
@@ -310,6 +311,41 @@ def makehist(events):
 		numerator_reco_mu = False #  
 		denominator_reco_met = False #
 		numerator_reco_met = False #
+		leadingJET_pt =0.
+		leadingJET_eta=0.
+		leadingJET_phi=0.
+		leadingMET_pt =0.
+		leadingMu_pt =0.
+		leadingMu_eta =0.
+		leadingMu_phi =0.
+		leadingMu_eta=0.
+		leadingMu_phi=0.
+		leadingMu_vxy =0.
+		leadingMu_vz =0.
+		leadingSubMu_pt =0.
+		leadingSubMu_eta=0.
+		leadingSubMu_phi=0.
+		leadingSubMu_vxy =0.
+		leadingSubMu_vz =0.
+		leadingGenJet_pt =0.
+		leadingGenJet_eta=0.
+		leadingGenJet_phi=0.
+		leadingGenMet_pt =0.
+		leadingGenMet_eta =0.
+		leadingGenMet_phi =0.
+		leadingGenMu_pt =0.0
+		leadingGenMu_eta=0.
+		leadingGenMu_phi=0.
+		leadingGenMu_vxy =0.
+		leadingGenMu_vz =0.
+		leadingGenSubMu_pt =0.0
+		leadingGenSubMu_eta=0.
+		leadingGenSubMu_phi=0.
+		leadingGenSubMu_vxy =0.
+		leadingGenSubMu_vz =0.
+			
+
+
 		#get all objects for this event 
 	    	event.getByLabel(triggerBitLabel,triggerBits)
 		event.getByLabel(triggerObjectLabel,triggerObjects)
@@ -330,27 +366,61 @@ def makehist(events):
 
 		#fill histograms for generated muon, jet and met information. Check denom for trigger and reco efficiency for met and mu
 		for gmutrack in genmutracks:
+			if gmutrack.pt() > leadingGenMu_pt:
+				leadingGenSubMu_pt = leadingGenMu_pt
+				leadingGenSubMu_eta =leadingGenMu_eta
+				leadingGenSubMu_phi =leadingGenMu_phi							
+				leadingGenSubMu_vxy =leadingGenMu_vxy
+				leadingGenSubMu_vz = leadingGenMu_vz
+				leadingGenMu_pt = gmutrack.pt()
+				leadingGenMu_eta = gmutrack.eta()
+				leadingGenMu_phi = gmutrack.phi()							
+				leadingGenMu_vxy = (float(gmutrack.vx()**2) + float(gmutrack.vy()**2))**(0.5)
+				leadingGenMu_vz = gmutrack.vz()
+			elif (gmutrack.pt() <= leadingGenMu_pt) and (gmutrack.pt() > leadingGenSubMu_pt):
+				leadingGenSubMu_pt = gmutrack.pt()
+				leadingGenSubMu_eta = gmutrack.eta()
+				leadingGenSubMu_phi = gmutrack.phi()							
+				leadingGenSubMu_vxy = (float(gmutrack.vx()**2) + float(gmutrack.vy()**2))**(0.5)
+				leadingGenSubMu_vz = gmutrack.vz()
 	#		print "gtrack: ", gtrack.pt(), gtrack.eta()
 			if abs(gmutrack.eta())<2.5 and gmutrack.pt()>3.0:
 				denom_count_reco_mu +=1
-			hist_pt_mu.Fill(gmutrack.pt())
-			hist_eta_mu.Fill(gmutrack.eta())
-			hist_phi_mu.Fill(gmutrack.phi())
-			hist_vxy_mu.Fill(float(gmutrack.vx()**2 + gmutrack.vy()**2)**(0.5))
-			hist_vz_mu.Fill(gmutrack.vz())
+		if not leadingGenMu_pt == 0.0:
+			hist_pt_mu.Fill(leadingGenMu_pt)
+			hist_eta_mu.Fill(leadingGenMu_eta)
+			hist_phi_mu.Fill(leadingGenMu_phi)
+			hist_vxy_mu.Fill(leadingGenMu_vxy)
+			hist_vz_mu.Fill(leadingGenMu_vz)
+			if not leadingGenSubMu_pt ==0.0:
+				hist_pt_musub.Fill(leadingGenSubMu_pt)
+				hist_eta_musub.Fill(leadingGenSubMu_eta)
+				hist_phi_musub.Fill(leadingGenSubMu_phi)
+				hist_vxy_musub.Fill(leadingGenSubMu_vxy)
+				hist_vz_musub.Fill(leadingGenSubMu_vz)
 		for gjtrack in genjettracks:
+			if gjtrack.pt() > leadingGenJet_pt:
+				leadingGenJet_pt  =gjtrack.pt()	
+				leadingGenJet_eta =gjtrack.eta()
+				leadingGenJet_phi =gjtrack.phi()
 	#		print "gtrack: ", gtrack.pt(), gtrack.eta()
-			hist_pt_jet.Fill(gjtrack.pt())
-			hist_eta_jet.Fill(gjtrack.eta())
-			hist_phi_jet.Fill(gjtrack.phi())
+		hist_pt_jet.Fill(leadingGenJet_pt)
+		hist_eta_jet.Fill(leadingGenJet_eta)
+		hist_phi_jet.Fill(leadingGenJet_phi)
 		for gmtrack in genmettracks:
-	#		print "gtrack: ", gtrack.pt(), gtrack.eta()
-			hist_pt_met.Fill(gmtrack.pt())
-			hist_eta_met.Fill(gmtrack.eta())
-			hist_phi_met.Fill(gmtrack.phi())
-
+			if gmtrack.pt() > leadingGenMet_pt:
+				leadingGenMet_pt = gmtrack.pt()
+				leadingGenMet_eta = gmtrack.eta()
+				leadingGenMet_phi = gmtrack.phi()
 			if gmtrack.pt()>20.0:
 				denom_count_reco_met +=1
+
+
+	#		print "gtrack: ", gtrack.pt(), gtrack.eta()
+		hist_pt_met.Fill(leadingGenMet_pt)
+		hist_eta_met.Fill(leadingGenMet_eta)
+		hist_phi_met.Fill(leadingGenMet_phi)
+
 		#run over jet information to add up ht information
 		for jtrack in jettracks:
 			#print jtrack.pt()
@@ -429,40 +499,92 @@ def makehist(events):
 			#	elif denominator_trig3:
 		#			print "bad hit 3"
 		#Fill efficiency plots
-		for track in mettracks:
-			#fill trigger eff plots
-			if denominator_trig1:
-				hist_trigeff_denom1.Fill(track.pt())
-			if numerator_trig1:
-				hist_trigeff_num1.Fill(track.pt())
-			if denominator_reco_met:
-				hist_recoeff_denom_met.Fill(track.pt())
-			if numerator_reco_met:
-				hist_recoeff_num_met.Fill(track.pt())
-		for track in tracks.product():
-			if denominator_trig3:
-				hist_trigeff_denom3.Fill(track.pt())
-			if numerator_trig3:
-				hist_trigeff_num3.Fill(track.pt())
-			if denominator_trig2:
-				hist_trigeff_denom2.Fill(track.pt())
-			if numerator_trig2:
-				hist_trigeff_num2.Fill(track.pt())
-			#fill reco eff plots
-			if denominator_reco_mu:
-				hist_recoeff_denom_mu.Fill(track.pt())
-			if numerator_reco_mu:
-				hist_recoeff_num_mu.Fill(track.pt())
+		#for track in mettracks:
+		#	#fill trigger eff plots
+		#	if denominator_trig1:
+		#		hist_trigeff_denom1met.Fill(track.pt())
+		#	if numerator_trig1:
+		#		hist_trigeff_num1met.Fill(track.pt())
+		#	if denominator_trig3:
+		#		hist_trigeff_denom3met.Fill(track.pt())
+		#	if numerator_trig3:
+		#		hist_trigeff_num3met.Fill(track.pt())
+		#	if denominator_trig2:
+		#		hist_trigeff_denom2met.Fill(track.pt())
+		#	if numerator_trig2:
+		#		hist_trigeff_num2met.Fill(track.pt())
+		#	if denominator_reco_met:
+		#		hist_recoeff_denom_met.Fill(track.pt())
+		#	if numerator_reco_met:
+		#		hist_recoeff_num_met.Fill(track.pt())
+		#for track in tracks.product():
+		#	if denominator_trig1:
+		#		hist_trigeff_denom1mu.Fill(track.pt())
+		#	if numerator_trig1:
+		#		hist_trigeff_num1mu.Fill(track.pt())
+		#	if denominator_trig3:
+		#		hist_trigeff_denom3mu.Fill(track.pt())
+		#	if numerator_trig3:
+		#		hist_trigeff_num3mu.Fill(track.pt())
+		#	if denominator_trig2:
+		#		hist_trigeff_denom2mu.Fill(track.pt())
+		#	if numerator_trig2:
+		#		hist_trigeff_num2mu.Fill(track.pt())
+		#	#fill reco eff plots
+		#	if denominator_reco_mu:
+		#		hist_recoeff_denom_mu.Fill(track.pt())
+		#	if numerator_reco_mu:
+		#		hist_recoeff_num_mu.Fill(track.pt())
+		#fill trigger eff plots
+		if denominator_trig1:
+			hist_trigeff_denom1met.Fill(leadingGenMet_pt)
+			hist_trigeff_denom1mu.Fill(leadingGenMu_pt)
+		if numerator_trig1:
+			hist_trigeff_num1met.Fill(leadingGenMet_pt)
+			hist_trigeff_num1mu.Fill(leadingGenMu_pt)
+		if denominator_trig3:
+			hist_trigeff_denom3met.Fill(leadingGenMet_pt)
+			hist_trigeff_denom3mu.Fill(leadingGenMu_pt)
+		if numerator_trig3:
+			hist_trigeff_num3met.Fill(leadingGenMet_pt)
+			hist_trigeff_num3mu.Fill(leadingGenMu_pt)
+		if denominator_trig2:
+			hist_trigeff_denom2met.Fill(leadingGenMet_pt)
+			hist_trigeff_denom2mu.Fill(leadingGenMu_pt)
+		if numerator_trig2:
+			hist_trigeff_num2met.Fill(leadingGenMet_pt)
+			hist_trigeff_num2mu.Fill(leadingGenMu_pt)
+		if denominator_reco_met:
+			hist_recoeff_denom_met.Fill(leadingGenMet_pt)
+	#		hist_recoeff_denom_met.Fill(leadingGenMu_pt)
+		if numerator_reco_met:
+			hist_recoeff_num_met.Fill(leadingGenMet_pt)
+	#		hist_recoeff_num_met.Fill(leadingGenMu_pt)
 
-	hist_trigeff1 = hist_trigeff_num1.Clone("trigefficiency1")
-	hist_trigeff1.Sumw2()
-	hist_trigeff1.Divide(hist_trigeff_denom1)
-	hist_trigeff2 = hist_trigeff_num2.Clone("trigefficiency2")
-	hist_trigeff2.Sumw2()
-	hist_trigeff2.Divide(hist_trigeff_denom2)
-	hist_trigeff3 = hist_trigeff_num3.Clone("trigefficiency3")
-	hist_trigeff3.Sumw2()
-	hist_trigeff3.Divide(hist_trigeff_denom3)
+		#fill reco eff plots
+		if denominator_reco_mu:
+			hist_recoeff_denom_mu.Fill(leadingGenMu_pt)
+		if numerator_reco_mu:
+			hist_recoeff_num_mu.Fill(leadingGenMu_pt)
+
+	hist_trigeff1mu = hist_trigeff_num1mu.Clone("trigefficiency1mu")
+	hist_trigeff1mu.Sumw2()
+	hist_trigeff1mu.Divide(hist_trigeff_denom1mu)
+	hist_trigeff2mu = hist_trigeff_num2mu.Clone("trigefficiency2mu")
+	hist_trigeff2mu.Sumw2()
+	hist_trigeff2mu.Divide(hist_trigeff_denom2mu)
+	hist_trigeff3mu = hist_trigeff_num3mu.Clone("trigefficiency3mu")
+	hist_trigeff3mu.Sumw2()
+	hist_trigeff3mu.Divide(hist_trigeff_denom3mu)
+	hist_trigeff1met = hist_trigeff_num1met.Clone("trigefficiency1met")
+	hist_trigeff1met.Sumw2()
+	hist_trigeff1met.Divide(hist_trigeff_denom1met)
+	hist_trigeff2met = hist_trigeff_num2met.Clone("trigefficiency2met")
+	hist_trigeff2met.Sumw2()
+	hist_trigeff2met.Divide(hist_trigeff_denom2met)
+	hist_trigeff3met = hist_trigeff_num3met.Clone("trigefficiency3met")
+	hist_trigeff3met.Sumw2()
+	hist_trigeff3met.Divide(hist_trigeff_denom3met)
 	hist_recoeff_mu = hist_recoeff_num_mu.Clone("recoefficiencymu")
 	hist_recoeff_mu.Sumw2()
 	hist_recoeff_mu.Divide(hist_recoeff_denom_mu)
@@ -470,47 +592,71 @@ def makehist(events):
 	hist_recoeff_met.Sumw2()
 	hist_recoeff_met.Divide(hist_recoeff_denom_met)
 	ROOT.gStyle.SetOptStat(0)
-	return (hist_pt_met,hist_eta_met,hist_phi_met,hist_pt_jet,hist_eta_jet,hist_phi_jet,hist_pt_mu,hist_eta_mu,hist_phi_mu,hist_vxy_mu,hist_vz_mu,hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_recoeff_mu,hist_recoeff_met)
+	metgen = [hist_pt_met,hist_eta_met,hist_phi_met]
+	jetgen = [hist_pt_jet,hist_eta_jet,hist_phi_jet]
+	mugen  = [hist_pt_mu,hist_eta_mu,hist_phi_mu,hist_vxy_mu,hist_vz_mu]
+	mugens = [hist_pt_musub,hist_eta_musub,hist_phi_musub,hist_vxy_musub,hist_vz_musub]
+	trigsmu =[hist_trigeff1mu,hist_trigeff2mu,hist_trigeff3mu]
+	trigsmet=[hist_trigeff1met,hist_trigeff2met,hist_trigeff3met]
+	recos  = [hist_recoeff_mu,hist_recoeff_met]
+	allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos
+	return allreturns
 
-(hist_pt_met1,hist_eta_met1,hist_phi_met1,hist_pt_jet1,hist_eta_jet1,hist_phi_jet1,hist_pt_mu1,hist_eta_mu1,hist_phi_mu1,hist_vxy_mu1,hist_vz_mu1,hist_trigeffmet1,hist_trigeffdca1,hist_trigeffdz1,hist_recoeff_mu1,hist_recoeff_met1) = makehist(events1)
-(hist_pt_met2,hist_eta_met2,hist_phi_met2,hist_pt_jet2,hist_eta_jet2,hist_phi_jet2,hist_pt_mu2,hist_eta_mu2,hist_phi_mu2,hist_vxy_mu2,hist_vz_mu2,hist_trigeffmet2,hist_trigeffdca2,hist_trigeffdz2,hist_recoeff_mu2,hist_recoeff_met2) = makehist(events2)
-(hist_pt_met3,hist_eta_met3,hist_phi_met3,hist_pt_jet3,hist_eta_jet3,hist_phi_jet3,hist_pt_mu3,hist_eta_mu3,hist_phi_mu3,hist_vxy_mu3,hist_vz_mu3,hist_trigeffmet3,hist_trigeffdca3,hist_trigeffdz3,hist_recoeff_mu3,hist_recoeff_met3) = makehist(events3)
-(hist_pt_met4,hist_eta_met4,hist_phi_met4,hist_pt_jet4,hist_eta_jet4,hist_phi_jet4,hist_pt_mu4,hist_eta_mu4,hist_phi_mu4,hist_vxy_mu4,hist_vz_mu4,hist_trigeffmet4,hist_trigeffdca4,hist_trigeffdz4,hist_recoeff_mu4,hist_recoeff_met4) = makehist(events4)
+allreturns1 = makehist(events1)
+allreturns2 = makehist(events2)
+allreturns3 = makehist(events3)
+allreturns4 = makehist(events4)
+#allreturns5 = makehists(events5)
+
+
+	#return [hist_pt_met,hist_eta_met,hist_phi_met,hist_pt_jet,hist_eta_jet,hist_phi_jet,hist_pt_mu,hist_eta_mu,hist_phi_mu,hist_vxy_mu,hist_vz_mu,hist_trigeff1,hist_trigeff2,hist_trigeff3,hist_recoeff_mu,hist_recoeff_met]
+
+#(hist_pt_met1,hist_eta_met1,hist_phi_met1,hist_pt_jet1,hist_eta_jet1,hist_phi_jet1,hist_pt_mu1,hist_eta_mu1,hist_phi_mu1,hist_vxy_mu1,hist_vz_mu1,hist_trigeffmet1,hist_trigeffdca1,hist_trigeffdz1,hist_recoeff_mu1,hist_recoeff_met1) = makehist(events1)
+#(hist_pt_met2,hist_eta_met2,hist_phi_met2,hist_pt_jet2,hist_eta_jet2,hist_phi_jet2,hist_pt_mu2,hist_eta_mu2,hist_phi_mu2,hist_vxy_mu2,hist_vz_mu2,hist_trigeffmet2,hist_trigeffdca2,hist_trigeffdz2,hist_recoeff_mu2,hist_recoeff_met2) = makehist(events2)
+#(hist_pt_met3,hist_eta_met3,hist_phi_met3,hist_pt_jet3,hist_eta_jet3,hist_phi_jet3,hist_pt_mu3,hist_eta_mu3,hist_phi_mu3,hist_vxy_mu3,hist_vz_mu3,hist_trigeffmet3,hist_trigeffdca3,hist_trigeffdz3,hist_recoeff_mu3,hist_recoeff_met3) = makehist(events3)
+#(hist_pt_met4,hist_eta_met4,hist_phi_met4,hist_pt_jet4,hist_eta_jet4,hist_phi_jet4,hist_pt_mu4,hist_eta_mu4,hist_phi_mu4,hist_vxy_mu4,hist_vz_mu4,hist_trigeffmet4,hist_trigeffdca4,hist_trigeffdz4,hist_recoeff_mu4,hist_recoeff_met4) = makehist(events4)
 
 if run_lifetimes12 or run_lifetimes1000:
-	(hist_pt_met5,hist_eta_met5,hist_phi_met5,hist_pt_jet5,hist_eta_jet5,hist_phi_jet5,hist_pt_mu5,hist_eta_mu5,hist_phi_mu5,hist_vxy_mu5,hist_vz_mu5,hist_trigeffmet5,hist_trigeffdca5,hist_trigeffdz5,hist_recoeff_mu5,hist_recoeff_met5) = makehist(events5)
-
-	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,hist_pt_met5)
-	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,hist_eta_met5)
-	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,hist_phi_met5)
-	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,hist_pt_jet5)
-	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,hist_eta_jet5)
-	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,hist_phi_jet5)
-	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,hist_pt_mu5)
-	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,hist_eta_mu5)
-	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,hist_phi_mu5)
-	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,hist_vxy_mu5)
-	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,hist_vz_mu5)
-	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,hist_trigeffmet5)
-	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,hist_trigeffdca5)
-	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,hist_trigeffdz5)
-	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,hist_recoeff_mu5)
-	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,hist_recoeff_met5)
-
+	allreturns5 = makehist(events5)
+	for h1,h2,h3,h4,h5 in zip(allreturns1,allreturns2,allreturns3,allreturns4,allreturns5):
+		drawall(h1,h2,h3,h4,h5)
 else:
-	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,None)
-	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,None)
-	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,None)
-	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,None)
-	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,None)
-	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,None)
-	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,None)
-	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,None)
-	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,None)
-	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,None)
-	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,None)
-	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,None)
-	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,None)
-	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,None)
-	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,None)
-	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,None)
+	for h1,h2,h3,h4 in zip(allreturns1,allreturns2,allreturns3,allreturns4):
+		drawall(h1,h2,h3,h4,None)
+	
+#	(hist_pt_met5,hist_eta_met5,hist_phi_met5,hist_pt_jet5,hist_eta_jet5,hist_phi_jet5,hist_pt_mu5,hist_eta_mu5,hist_phi_mu5,hist_vxy_mu5,hist_vz_mu5,hist_trigeffmet5,hist_trigeffdca5,hist_trigeffdz5,hist_recoeff_mu5,hist_recoeff_met5) = makehist(events5)
+#
+#	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,hist_pt_met5)
+#	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,hist_eta_met5)
+#	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,hist_phi_met5)
+#	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,hist_pt_jet5)
+#	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,hist_eta_jet5)
+#	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,hist_phi_jet5)
+#	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,hist_pt_mu5)
+#	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,hist_eta_mu5)
+#	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,hist_phi_mu5)
+#	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,hist_vxy_mu5)
+#	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,hist_vz_mu5)
+#	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,hist_trigeffmet5)
+#	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,hist_trigeffdca5)
+#	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,hist_trigeffdz5)
+#	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,hist_recoeff_mu5)
+#	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,hist_recoeff_met5)
+#
+#else:
+#	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,None)
+#	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,None)
+#	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,None)
+#	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,None)
+#	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,None)
+#	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,None)
+#	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,None)
+#	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,None)
+#	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,None)
+#	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,None)
+#	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,None)
+#	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,None)
+#	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,None)
+#	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,None)
+#	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,None)
+#	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,None)
