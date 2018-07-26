@@ -137,10 +137,7 @@ def setrange(h1,h2,h3,h4,h5=None):
 	max1 = max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum()]) if h5 is None else max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum(),h5.GetMaximum()])
 	min1 = min([h1.GetMinimum(),h2.GetMinimum(),h3.GetMinimum(),h4.GetMinimum()]) if h5 is None else min([h1.GetMinimum(),h2.GetMinimum(),h3.GetMinimum(),h4.GetMinimum(),h5.GetMinimum()])
 	h1.SetMaximum(max1*1.15)
-	if min1 ==0:
-		h1.SetMinimum(0.0001)
-	else:
-		h1.SetMinimum(min1*0.85)
+	h1.SetMinimum(min1*0.85)
 def norm(histogram):
 	if histogram.Integral() != 0:
 		n = 1/histogram.Integral()
@@ -797,8 +794,8 @@ def makehist(events):
 	trigsmu =[hist_trigeff1mu,hist_trigeff2mu,hist_trigeff3mu]
 	trigsmet=[hist_trigeff1met,hist_trigeff2met,hist_trigeff3met]
 	recos  = [hist_recoeff_mu,hist_recoeff_met]
-	allreturnsgen = metgen+jetgen+mugen+mugens+angular_sep+nums
-	allreturnsrec = metgenrec+jetgenrec+mugenrec+mugensrec+angular_seprec+numsrec
+	allreturnsgen = metgen+jetgen+mugen+mugens+angular_sep
+	allreturnsrec = metgenrec+jetgenrec+mugenrec+mugensrec+angular_seprec
 	allreturns = allreturnsgen+allreturnsrec
 	#allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos+angular_sep
 	return allreturns
