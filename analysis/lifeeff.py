@@ -28,7 +28,8 @@ jet,jetlabel = Handle("vector<reco::PFJet>"),("ak4PFJets","","RECO")
 ###############################################################################################################################
 run_masses = False
 run_lifetimes12 = False
-run_lifetimes1000 = True
+run_lifetimes19 = True
+run_lifetimes1000 = False
 
 
 
@@ -36,18 +37,19 @@ run_lifetimes1000 = True
 ################SETUP FILES FOR LIFETIME COMPARISON
 ##################################################################################################################
 # open files 
-if run_lifetimes12:
-	mass_split = "5p25_dMchi-0p5_mZD-15"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau3_12/"
-	with open('filelist/ctau/ctau12_3.txt') as f:
+if run_lifetimes19:
+	mass_split = "52p5_dMchi-20_"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
+	with open('filelist/ctau/redone5.txt') as f:
 		rootfilesx = f.readlines()
 #	rootfilesx = rootfilesx[:40] + rootfilesx[246:270]+ rootfilesx[275:300] + rootfilesx[305:340] + rootfilesx[637:653]
 	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
-	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p20e-03_" in x) ]
-	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p01_" in x) ]
-	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p12_" in x) ]
-	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p2_" in x) ]
-	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-12p0_" in x) ]
+	#rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p20e-03_" in x) ]
+	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_Wchi2-1p97e-13_" in x) ]
+	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_Wchi2-1p97e-14_" in x) ]
+	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_Wchi2-1p97e-15_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_Wchi2-1p97e-16_" in x) ]
+	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_Wchi2-1p97e-17_" in x) ]
 	print rootfiles1	
 	print rootfiles2
 	print rootfiles3
@@ -58,10 +60,35 @@ if run_lifetimes12:
 	events3 = Events(rootfiles3)
 	events4 = Events(rootfiles4)
 	events5 = Events(rootfiles5)
+	savedir = "output/lifetimes19/"
+if run_lifetimes12:
+	mass_split = "52p5_dMchi-5_"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
+	with open('filelist/ctau/redone5.txt') as f:
+		rootfilesx = f.readlines()
+#	rootfilesx = rootfilesx[:40] + rootfilesx[246:270]+ rootfilesx[275:300] + rootfilesx[305:340] + rootfilesx[637:653]
+	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
+	#rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p20e-03_" in x) ]
+	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p012_" in x) ]
+	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p12_" in x) ]
+	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p2_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-12p0_" in x) ]
+	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-120_" in x) ]
+	print rootfiles1	
+	print rootfiles2
+	print rootfiles3
+	print rootfiles4
+	print rootfiles5
+	events1 = Events(rootfiles1)
+	events2 = Events(rootfiles2)
+	events3 = Events(rootfiles3)
+	events4 = Events(rootfiles4)
+	events5 = Events(rootfiles5)
+	savedir = "output/lifetimes12/"
 if run_lifetimes1000:
 	mass_split = "52p5_dMchi-5_"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone2/"
-	with open('filelist/ctau/redone2.txt') as f:
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
+	with open('filelist/ctau/redone5.txt') as f:
 		rootfilesx = f.readlines()
 	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
 	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
@@ -85,12 +112,12 @@ if run_lifetimes1000:
 ############3SETUP FILES FOR MASS COMPARISON
 ###############################################################################################################
 if run_masses:
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone2/"
-	lifetime = "ctau-10_"
-	with open('filelist/ctau/redone2.txt') as f:
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
+	lifetime = "1p00e-03"
+	with open('filelist/ctau/redone5.txt') as f:
 		rootfilesx = f.readlines()
 	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
-	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and lifetime in x)]
+	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and lifetime in x and 'ctau' not in x)]
 	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-5_" in x) ]
 	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-20_" in x) ]
 	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-5p25_dMchi-0p5_" in x) ]
@@ -110,7 +137,10 @@ def setrange(h1,h2,h3,h4,h5=None):
 	max1 = max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum()]) if h5 is None else max([h1.GetMaximum(),h2.GetMaximum(),h3.GetMaximum(),h4.GetMaximum(),h5.GetMaximum()])
 	min1 = min([h1.GetMinimum(),h2.GetMinimum(),h3.GetMinimum(),h4.GetMinimum()]) if h5 is None else min([h1.GetMinimum(),h2.GetMinimum(),h3.GetMinimum(),h4.GetMinimum(),h5.GetMinimum()])
 	h1.SetMaximum(max1*1.15)
-	h1.SetMinimum(min1*0.85)
+	if min1 ==0:
+		h1.SetMinimum(0.00001)
+	else:
+		h1.SetMinimum(min1*0.85)
 def norm(histogram):
 	if histogram.Integral() != 0:
 		n = 1/histogram.Integral()
@@ -125,7 +155,8 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 	namepdf = savedir+"all_%s.pdf"%(hist1.GetName())
 	xtitle = 'pt [GeV]' if ('pt' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
 	xtitle = xtitle if ('vertex' not in name) else ('dxy [cm]' if 'vxy' in name else ('dz [cm]' if 'vz' in name else 'v unknown'))
-	xtitle = xtitle if ('eff' not in name) else ('MET pt [GeV]' if 'met' in name else ('Mu pt [GeV]' if 'mu' in name else 'eff unknown'))
+	xtitle = xtitle if ('eff' not in name) else ('MET [GeV]' if 'met' in name else ('Mu pt [GeV]' if 'mu' in name else 'eff unknown'))
+	xtitle = xtitle if ('dR' not in name and 'dphi' not in name) else ('dR' if 'dR' in name else ('dPhi' if 'dphi' in name else 'angular separation unknown'))
 	hist1.GetXaxis().SetTitle(xtitle)
 
 	hist1.SetLineColor(2)
@@ -164,10 +195,6 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 			hist5.Draw('E1 Same')
 	if 'eff' not in name:
 		print "not eff: ", name 
-		if 'vxy' in name:
-			c.SetLogy(1)
-		else:
-			c.SetLogy(0)		
 		hist1.GetYaxis().SetTitle("Counts (normalized)")	
 		norm(hist1)
 		norm(hist2)
@@ -176,6 +203,11 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		if hist5 is not None:
 			norm(hist5)
 		setrange(hist1,hist2,hist3,hist4) if hist5 is None else setrange(hist1,hist2,hist3,hist4,hist5)
+		if 'vxy' in name:
+			c.SetLogy()
+			c.Update()
+		else:
+			pass	
 		hist1.Draw('HIST')
 		hist2.Draw('HIST Same')
 		hist3.Draw('HIST Same')
@@ -220,7 +252,7 @@ def draw(histogram):
 
 def makehist(events):
 	# SET UP HISTOGRAMS
-	hist_pt_met = ROOT.TH1F("histptmet","gen leading MET pt", 100,0,200)
+	hist_pt_met = ROOT.TH1F("histptmet","gen leading MET", 100,0,200)
 	hist_eta_met = ROOT.TH1F("histetamet","gen leading Met eta", 40,-6,6)
 	hist_phi_met = ROOT.TH1F("histphimet","gen leading Met phi", 40,-6,6)
 	hist_pt_jet = ROOT.TH1F("histptjet","gen leading Jet pt", 100,0,100)
@@ -252,6 +284,9 @@ def makehist(events):
 	hist_recoeff_num_mu = ROOT.TH1F("histrecoeffnummumet","recoefficiency mu", 50,0,50)
 	hist_recoeff_denom_met = ROOT.TH1F("histrecoeffdenommet","recoeff met denominator", 50,0,200)
 	hist_recoeff_num_met = ROOT.TH1F("histrecoeffnummet","recoefficiency met", 50,0,200)
+	hist_dR_mu = ROOT.TH1F("histdrmu","dR between gen leading mu and subleading mu", 50,0,2)
+	hist_dphi_metmu = ROOT.TH1F("histdphimu"," dPhi between gen MET and leading mu", 50,0,2)
+	hist_dphi_metjet = ROOT.TH1F("histdphimet"," dPhi between gen MET and leading jet", 50,0,5)
 
 	hist_pt_met.Sumw2()
 	hist_eta_met.Sumw2()
@@ -285,6 +320,9 @@ def makehist(events):
 	hist_recoeff_num_mu.Sumw2()
 	hist_recoeff_denom_met.Sumw2()
 	hist_recoeff_num_met.Sumw2()
+	hist_dR_mu.Sumw2()
+	hist_dphi_metmu.Sumw2()
+	hist_dphi_metjet.Sumw2()
 	
 	#Run over events
 	for iev,event in enumerate(events):
@@ -420,7 +458,10 @@ def makehist(events):
 		hist_pt_met.Fill(leadingGenMet_pt)
 		hist_eta_met.Fill(leadingGenMet_eta)
 		hist_phi_met.Fill(leadingGenMet_phi)
-
+		
+		hist_dR_mu.Fill((float(leadingGenMet_eta-leadingGenMu_eta)**2 +float(leadingGenMet_phi-leadingGenMu_phi)**2)**(0.5))
+		hist_dphi_metmu.Fill(abs(leadingGenMet_phi-leadingGenMu_phi))
+		hist_dphi_metjet.Fill(abs(leadingGenMet_phi - leadingGenJet_phi))
 		#run over jet information to add up ht information
 		for jtrack in jettracks:
 			#print jtrack.pt()
@@ -599,7 +640,8 @@ def makehist(events):
 	trigsmu =[hist_trigeff1mu,hist_trigeff2mu,hist_trigeff3mu]
 	trigsmet=[hist_trigeff1met,hist_trigeff2met,hist_trigeff3met]
 	recos  = [hist_recoeff_mu,hist_recoeff_met]
-	allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos
+	angular_sep = 	[hist_dR_mu,hist_dphi_metmu,hist_dphi_metjet]
+	allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos+angular_sep
 	return allreturns
 
 allreturns1 = makehist(events1)
@@ -616,7 +658,7 @@ allreturns4 = makehist(events4)
 #(hist_pt_met3,hist_eta_met3,hist_phi_met3,hist_pt_jet3,hist_eta_jet3,hist_phi_jet3,hist_pt_mu3,hist_eta_mu3,hist_phi_mu3,hist_vxy_mu3,hist_vz_mu3,hist_trigeffmet3,hist_trigeffdca3,hist_trigeffdz3,hist_recoeff_mu3,hist_recoeff_met3) = makehist(events3)
 #(hist_pt_met4,hist_eta_met4,hist_phi_met4,hist_pt_jet4,hist_eta_jet4,hist_phi_jet4,hist_pt_mu4,hist_eta_mu4,hist_phi_mu4,hist_vxy_mu4,hist_vz_mu4,hist_trigeffmet4,hist_trigeffdca4,hist_trigeffdz4,hist_recoeff_mu4,hist_recoeff_met4) = makehist(events4)
 
-if run_lifetimes12 or run_lifetimes1000:
+if run_lifetimes12 or run_lifetimes1000 or run_lifetimes19:
 	allreturns5 = makehist(events5)
 	for h1,h2,h3,h4,h5 in zip(allreturns1,allreturns2,allreturns3,allreturns4,allreturns5):
 		drawall(h1,h2,h3,h4,h5)
