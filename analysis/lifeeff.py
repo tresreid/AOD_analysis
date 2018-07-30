@@ -39,8 +39,8 @@ run_lifetimes1000 = False
 # open files 
 if run_lifetimes19:
 	mass_split = "52p5_dMchi-20_"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
-	with open('filelist/ctau/redone5.txt') as f:
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe/"
+	with open('filelist/lhe.txt') as f:
 		rootfilesx = f.readlines()
 #	rootfilesx = rootfilesx[:40] + rootfilesx[246:270]+ rootfilesx[275:300] + rootfilesx[305:340] + rootfilesx[637:653]
 	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
@@ -63,8 +63,8 @@ if run_lifetimes19:
 	savedir = "output/lifetimes19/"
 if run_lifetimes12:
 	mass_split = "52p5_dMchi-5_"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
-	with open('filelist/ctau/redone5.txt') as f:
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe/"
+	with open('filelist/ctau/lhe.txt') as f:
 		rootfilesx = f.readlines()
 #	rootfilesx = rootfilesx[:40] + rootfilesx[246:270]+ rootfilesx[275:300] + rootfilesx[305:340] + rootfilesx[637:653]
 	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
@@ -72,7 +72,7 @@ if run_lifetimes12:
 	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p012_" in x) ]
 	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p12_" in x) ]
 	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1p2_" in x) ]
-	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-12p0_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-12_" in x) ]
 	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-120_" in x) ]
 	print rootfiles1	
 	print rootfiles2
@@ -86,9 +86,9 @@ if run_lifetimes12:
 	events5 = Events(rootfiles5)
 	savedir = "output/lifetimes12/"
 if run_lifetimes1000:
-	mass_split = "52p5_dMchi-5_"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
-	with open('filelist/ctau/redone5.txt') as f:
+	mass_split = "5p25_dMchi-0p5_"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe2/"
+	with open('filelist/lhe3.txt') as f:
 		rootfilesx = f.readlines()
 	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
 	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
@@ -112,16 +112,16 @@ if run_lifetimes1000:
 ############3SETUP FILES FOR MASS COMPARISON
 ###############################################################################################################
 if run_masses:
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/ctau_redone4/"
-	lifetime = "1p00e-03"
-	with open('filelist/ctau/redone5.txt') as f:
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe2/"
+	lifetime = "ctau-1_"
+	with open('filelist/lhe3.txt') as f:
 		rootfilesx = f.readlines()
 	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
-	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and lifetime in x and 'ctau' not in x)]
+	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and lifetime in x)]# and 'ctau' not in x)]
 	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-5_" in x) ]
-	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-20_" in x) ]
+	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-60_dMchi-20_" in x) ]
 	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-5p25_dMchi-0p5_" in x) ]
-	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-5p25_dMchi-2p0_" in x) ]
+	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-6p0_dMchi-2p0_" in x) ]
 
 	print rootfiles1
 	print rootfiles2
@@ -203,11 +203,11 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		if hist5 is not None:
 			norm(hist5)
 		setrange(hist1,hist2,hist3,hist4) if hist5 is None else setrange(hist1,hist2,hist3,hist4,hist5)
-		if 'vxy' in name:
-			c.SetLogy()
-			c.Update()
-		else:
-			pass	
+	#	if 'vxy' in name:
+	#		c.SetLogy()
+	#		c.Update()
+	#	else:
+	#		pass	
 		hist1.Draw('HIST')
 		hist2.Draw('HIST Same')
 		hist3.Draw('HIST Same')
@@ -224,10 +224,10 @@ def drawall(hist1,hist2,hist3,hist4,hist5=None):
 		leg.AddEntry(hist5,"1000 cm","f")
 	else:
 		leg = ROOT.TLegend(.75,.75,.95,.95)
-		leg.AddEntry(hist1,"M=52.5+/- 5","f")
-		leg.AddEntry(hist2,"M=52.5 +/- 20","f")
-		leg.AddEntry(hist3,"M=5.25 +/- 0.5","f")
-		leg.AddEntry(hist4,"M=5.25 +/- 2.0","f")
+		leg.AddEntry(hist1,"M=52.5+/- 2.5","f")
+		leg.AddEntry(hist2,"M=60 +/- 10","f")
+		leg.AddEntry(hist3,"M=5.25 +/- 0.25","f")
+		leg.AddEntry(hist4,"M=6 +/- 1.0","f")
 	leg.Draw()
 	c.Update()
 	c.SaveAs(name)
@@ -249,11 +249,39 @@ def draw(histogram):
 		histogram.Draw('B')
 	c.SaveAs(name)
 	c.SaveAs(namepdf)
+def draw2d(histogram,num):
+	c = ROOT.TCanvas("c","c",800,800)
+	c.cd
+	name = savedir+"2d%s_%s.png"%(num,histogram.GetName())
+	namepdf = savedir+"2d%s_%s.pdf"%(num,histogram.GetName())
+	xtitle = 'eta' 
+	ytitle = 'MET [GeV]'
+	if num == 1:
+		title="M=52.5+/- 2.5"
+	elif num == 2:
+		title="M=60 +/- 10"
+	elif num ==3:
+		title="M=5.25 +/- 0.25"
+	elif num == 4:
+		title = "M=6 +/- 1.0"
+	else:
+		title="unknown"
+	if 'rec' in name:
+		title = 'Reco '+ title
+	else:
+		title = 'Gen '+ title
+	histogram.SetTitle(title)
+	histogram.GetXaxis().SetTitle(xtitle)
+	histogram.GetYaxis().SetTitle(ytitle)
+	histogram.Draw("COLZ")
+	c.SaveAs(name)
+	c.SaveAs(namepdf)
 
 def makehist(events):
 	# SET UP HISTOGRAMS
 	hist_pt_met = ROOT.TH1F("histptmet","gen leading MET", 100,0,200)
 	hist_eta_met = ROOT.TH1F("histetamet","gen leading Met eta", 40,-6,6)
+	hist_etapt_met = ROOT.TH2F("histetaptmet","gen leading Met eta vs pt", 40,-6,6,100,0,200)
 	hist_phi_met = ROOT.TH1F("histphimet","gen leading Met phi", 40,-6,6)
 	hist_pt_jet = ROOT.TH1F("histptjet","gen leading Jet pt", 100,0,200)
 	hist_eta_jet = ROOT.TH1F("histetajet","gen leading Jet eta", 40,-6,6)
@@ -261,8 +289,8 @@ def makehist(events):
 	hist_pt_mu = ROOT.TH1F("histptmu","gen leading Mu pt", 100,0,25)
 	hist_eta_mu = ROOT.TH1F("histetamu","gen leading Mu eta", 40,-6,6)
 	hist_phi_mu = ROOT.TH1F("histphimu","gen leading Mu phi", 40,-6,6)
-	hist_vxy_mu = ROOT.TH1F("histvertexvxymu","gen leading Mu vxy", 100,0,0.3)
-	hist_vz_mu = ROOT.TH1F("histvertexvzmu","gen leading Mu vz", 50,-15,15)
+	hist_vxy_mu = ROOT.TH1F("histvertexvxymu","gen leading Mu vxy", 100,0,.30)
+	hist_vz_mu = ROOT.TH1F("histvertexvzmu","gen leading Mu vz", 50,-15,40)
 	hist_pt_musub = ROOT.TH1F("histptmusub","gen subleading Mu pt", 100,0,15)
 	hist_eta_musub = ROOT.TH1F("histetamusub","gen subleading Mu eta", 40,-6,6)
 	hist_phi_musub = ROOT.TH1F("histphimusub","gen subleading Mu phi", 40,-6,6)
@@ -271,12 +299,13 @@ def makehist(events):
 	hist_num_jet = ROOT.TH1F("histnumjet","gen number of mu", 10,0,10)
 	hist_num_mu = ROOT.TH1F("histnummu","gen number of jets", 10,0,10)
 	hist_dR_mu = ROOT.TH1F("histdrmu","dR: gen leading mu and subleading mu", 50,0,6)
-	hist_dphi_metmu = ROOT.TH1F("histdphimu"," dPhi: gen MET and leading mu", 50,0,5)
-	hist_dphi_mumu = ROOT.TH1F("histdphimu"," dPhi: gen leading mu and subleading mu", 50,0,5)
-	hist_dphi_metjet = ROOT.TH1F("histdphimet"," dPhi: gen MET and leading jet", 50,0,5)
+	hist_dphi_metmu = ROOT.TH1F("histdphimetmu"," dPhi: gen MET and leading mu", 50,0,5)
+	hist_dphi_mumu = ROOT.TH1F("histdphimumu"," dPhi: gen leading mu and subleading mu", 50,0,5)
+	hist_dphi_metjet = ROOT.TH1F("histdphimetjet"," dPhi: gen MET and leading jet", 50,0,5)
 	
 	hist_pt_met_rec = ROOT.TH1F("histptmetrec","reco leading MET", 100,0,200)
 	hist_eta_met_rec = ROOT.TH1F("histetametrec","reco leading Met eta", 40,-6,6)
+	hist_etapt_met_rec = ROOT.TH2F("histetaptmetrec","gen leading Met eta vs pt", 40,-6,6,100,0,200)
 	hist_phi_met_rec = ROOT.TH1F("histphimetrec","reco leading Met phi", 40,-6,6)
 	hist_pt_jet_rec = ROOT.TH1F("histptjetrec","reco leading Jet pt", 100,0,200)
 	hist_eta_jet_rec = ROOT.TH1F("histetajetrec","reco leading Jet eta", 40,-6,6)
@@ -284,8 +313,8 @@ def makehist(events):
 	hist_pt_mu_rec = ROOT.TH1F("histptmurec","reco leading Mu pt", 100,0,25)
 	hist_eta_mu_rec = ROOT.TH1F("histetamurec","reco leading Mu eta", 40,-6,6)
 	hist_phi_mu_rec = ROOT.TH1F("histphimurec","reco leading Mu phi", 40,-6,6)
-	hist_vxy_mu_rec = ROOT.TH1F("histvertexvxymurec","reco leading Mu vxy", 100,0,0.3)
-	hist_vz_mu_rec = ROOT.TH1F("histvertexvzmurec","reco leading Mu vz", 50,-15,15)
+	hist_vxy_mu_rec = ROOT.TH1F("histvertexvxymurec","reco leading Mu vxy", 100,0,30)
+	hist_vz_mu_rec = ROOT.TH1F("histvertexvzmurec","reco leading Mu vz", 50,-15,150)
 	hist_pt_musub_rec = ROOT.TH1F("histptmusubrec","reco subleading Mu pt", 100,0,15)
 	hist_eta_musub_rec = ROOT.TH1F("histetamusubrec","reco subleading Mu eta", 40,-6,6)
 	hist_phi_musub_rec = ROOT.TH1F("histphimusubrec","reco subleading Mu phi", 40,-6,6)
@@ -294,9 +323,9 @@ def makehist(events):
 	hist_num_jet_rec = ROOT.TH1F("histnumjetreco","reco number of mu", 10,0,10)
 	hist_num_mu_rec = ROOT.TH1F("histnummureco","reco number of jets", 10,0,10)
 	hist_dR_mu_rec = ROOT.TH1F("histdrmureco","dR: reco leading mu and subleading mu", 50,0,6)
-	hist_dphi_metmu_rec = ROOT.TH1F("histdphimureco"," dPhi: reco MET and leading mu", 50,0,5)
-	hist_dphi_mumu_rec = ROOT.TH1F("histdphimureco"," dPhi: reco leading mu and subleading mu", 50,0,5)
-	hist_dphi_metjet_rec = ROOT.TH1F("histdphimetreco"," dPhi: reco MET and leading jet", 50,0,5)
+	hist_dphi_metmu_rec = ROOT.TH1F("histdphimetmureco"," dPhi: reco MET and leading mu", 50,0,5)
+	hist_dphi_mumu_rec = ROOT.TH1F("histdphimumureco"," dPhi: reco leading mu and subleading mu", 50,0,5)
+	hist_dphi_metjet_rec = ROOT.TH1F("histdphimetjetreco"," dPhi: reco MET and leading jet", 50,0,5)
 
 	hist_trigeff_denom1mu = ROOT.TH1F("histtrigeffdenom1mu","trigeff denominator", 50,0,80)
 	hist_trigeff_num1mu = ROOT.TH1F("histtrigeffnum1mu","trigefficiency HLT_PFMET120_PFMHT120", 50,0,80)
@@ -436,6 +465,8 @@ def makehist(events):
 		leadingGenSubMu_phi=0.
 		leadingGenSubMu_vxy =0.
 		leadingGenSubMu_vz =0.
+		genmucount =0
+		genjetcount =0
 		
 		reco_leadingJET_pt =0.
 		reco_leadingJET_eta=0.
@@ -469,7 +500,8 @@ def makehist(events):
 		reco_leadingGenSubMu_phi=0.
 		reco_leadingGenSubMu_vxy =0.
 		reco_leadingGenSubMu_vz =0.
-			
+		reco_genmucount =0
+		reco_genjetcount =0
 
 
 		#get all objects for this event 
@@ -493,6 +525,8 @@ def makehist(events):
 
 		#fill histograms for generated muon, jet and met information. Check denom for trigger and reco efficiency for met and mu
 		for gmutrack in genmutracks:
+			if gmutrack.pt() > 20.0:
+				genmucount += 1
 			if gmutrack.pt() > leadingGenMu_pt:
 				leadingGenSubMu_pt = leadingGenMu_pt
 				leadingGenSubMu_eta =leadingGenMu_eta
@@ -514,6 +548,8 @@ def makehist(events):
 			if abs(gmutrack.eta())<2.5 and gmutrack.pt()>3.0:
 				denom_count_reco_mu +=1
 		for gjtrack in genjettracks:
+			if gjtrack.pt() > 20.0:
+				genjetcount +=1
 			if gjtrack.pt() > leadingGenJet_pt:
 				leadingGenJet_pt  =gjtrack.pt()	
 				leadingGenJet_eta =gjtrack.eta()
@@ -535,6 +571,8 @@ def makehist(events):
 			hist_phi_mu.Fill(leadingGenMu_phi)
 			hist_vxy_mu.Fill(leadingGenMu_vxy)
 			hist_vz_mu.Fill(leadingGenMu_vz)
+			hist_dphi_mumu.Fill(abs(leadingGenSubMu_phi-leadingGenMu_phi))
+			hist_dR_mu.Fill((float(leadingGenMet_eta-leadingGenMu_eta)**2 +float(leadingGenMet_phi-leadingGenMu_phi)**2)**(0.5))
 			if not leadingGenSubMu_pt ==0.0:
 				hist_pt_musub.Fill(leadingGenSubMu_pt)
 				hist_eta_musub.Fill(leadingGenSubMu_eta)
@@ -546,19 +584,22 @@ def makehist(events):
 		hist_phi_jet.Fill(leadingGenJet_phi)
 		hist_pt_met.Fill(leadingGenMet_pt)
 		hist_eta_met.Fill(leadingGenMet_eta)
+		hist_etapt_met.Fill(leadingGenMet_eta,leadingGenMet_pt)
 		hist_phi_met.Fill(leadingGenMet_phi)
 		
-		hist_dR_mu.Fill((float(leadingGenMet_eta-leadingGenMu_eta)**2 +float(leadingGenMet_phi-leadingGenMu_phi)**2)**(0.5))
+	#	hist_dR_mu.Fill((float(leadingGenMet_eta-leadingGenMu_eta)**2 +float(leadingGenMet_phi-leadingGenMu_phi)**2)**(0.5))
 		hist_dphi_metmu.Fill(abs(leadingGenMet_phi-leadingGenMu_phi))
-		hist_dphi_mumu.Fill(abs(leadingGenSubMu_phi-leadingGenMu_phi))
+		#hist_dphi_mumu.Fill(abs(leadingGenSubMu_phi-leadingGenMu_phi))
 		hist_dphi_metjet.Fill(abs(leadingGenMet_phi - leadingGenJet_phi))
-		hist_num_jet.Fill(len(genjettracks))
-		hist_num_mu.Fill(len(genmutracks))
+		hist_num_jet.Fill(genjetcount)
+		hist_num_mu.Fill(genmucount)
 	
 
 
 	#run over jet information to add up ht information
 		for jtrack in jettracks:
+			if jtrack.pt() > 20.0:
+				reco_genjetcount +=1
 			#print jtrack.pt()
 			if jtrack.pt() > reco_leadingGenJet_pt:
 				reco_leadingGenJet_pt  =jtrack.pt()	
@@ -592,6 +633,8 @@ def makehist(events):
 			denominator_reco_met = True
 			
 		for track in mutracks:
+			if track.pt() > 20.0:
+				reco_genmucount += 1
 			if track.pt() > reco_leadingGenMu_pt:
 				reco_leadingGenSubMu_pt = reco_leadingGenMu_pt
 				reco_leadingGenSubMu_eta =reco_leadingGenMu_eta
@@ -635,6 +678,8 @@ def makehist(events):
 			hist_phi_mu_rec.Fill(reco_leadingGenMu_phi)
 			hist_vxy_mu_rec.Fill(reco_leadingGenMu_vxy)
 			hist_vz_mu_rec.Fill(reco_leadingGenMu_vz)
+			hist_dphi_mumu_rec.Fill(abs(reco_leadingGenSubMu_phi-reco_leadingGenMu_phi))
+			hist_dR_mu_rec.Fill((float(reco_leadingGenMet_eta-reco_leadingGenMu_eta)**2 +float(reco_leadingGenMet_phi-reco_leadingGenMu_phi)**2)**(0.5))
 			if not reco_leadingGenSubMu_pt ==0.0:
 				hist_pt_musub_rec.Fill(reco_leadingGenSubMu_pt)
 				hist_eta_musub_rec.Fill(reco_leadingGenSubMu_eta)
@@ -646,14 +691,15 @@ def makehist(events):
 		hist_phi_jet_rec.Fill(reco_leadingGenJet_phi)
 		hist_pt_met_rec.Fill(reco_leadingGenMet_pt)
 		hist_eta_met_rec.Fill(reco_leadingGenMet_eta)
+		hist_etapt_met_rec.Fill(reco_leadingGenMet_eta,reco_leadingGenMet_pt)
 		hist_phi_met_rec.Fill(reco_leadingGenMet_phi)
 		
-		hist_dR_mu_rec.Fill((float(reco_leadingGenMet_eta-reco_leadingGenMu_eta)**2 +float(reco_leadingGenMet_phi-reco_leadingGenMu_phi)**2)**(0.5))
+#		hist_dR_mu_rec.Fill((float(reco_leadingGenMet_eta-reco_leadingGenMu_eta)**2 +float(reco_leadingGenMet_phi-reco_leadingGenMu_phi)**2)**(0.5))
 		hist_dphi_metmu_rec.Fill(abs(reco_leadingGenMet_phi-reco_leadingGenMu_phi))
-		hist_dphi_mumu_rec.Fill(abs(reco_leadingGenSubMu_phi-reco_leadingGenMu_phi))
+		#hist_dphi_mumu_rec.Fill(abs(reco_leadingGenSubMu_phi-reco_leadingGenMu_phi))
 		hist_dphi_metjet_rec.Fill(abs(reco_leadingGenMet_phi - reco_leadingGenJet_phi))
-		hist_num_jet.Fill(len(jettracks))
-		hist_num_mu.Fill(len(mutracks))
+		hist_num_jet_rec.Fill(reco_genjetcount)
+		hist_num_mu_rec.Fill(reco_genmucount)
 
 
 	# trigger efficiency
@@ -799,14 +845,16 @@ def makehist(events):
 	recos  = [hist_recoeff_mu,hist_recoeff_met]
 	allreturnsgen = metgen+jetgen+mugen+mugens+angular_sep+nums
 	allreturnsrec = metgenrec+jetgenrec+mugenrec+mugensrec+angular_seprec+numsrec
-	allreturns = allreturnsgen+allreturnsrec
-	#allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos+angular_sep
-	return allreturns
+	allreturns = allreturnsgen+allreturnsrec +trigsmu+trigsmet+recos
 
-allreturns1 = makehist(events1)
-allreturns2 = makehist(events2)
-allreturns3 = makehist(events3)
-allreturns4 = makehist(events4)
+	hist2d = [hist_etapt_met,hist_etapt_met_rec]
+	#allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos+angular_sep
+	return (allreturns,hist2d)
+
+(allreturns1,hist2d1) = makehist(events1)
+(allreturns2,hist2d2) = makehist(events2)
+(allreturns3,hist2d3) = makehist(events3)
+(allreturns4,hist2d4) = makehist(events4)
 #allreturns5 = makehists(events5)
 
 
@@ -818,46 +866,21 @@ allreturns4 = makehist(events4)
 #(hist_pt_met4,hist_eta_met4,hist_phi_met4,hist_pt_jet4,hist_eta_jet4,hist_phi_jet4,hist_pt_mu4,hist_eta_mu4,hist_phi_mu4,hist_vxy_mu4,hist_vz_mu4,hist_trigeffmet4,hist_trigeffdca4,hist_trigeffdz4,hist_recoeff_mu4,hist_recoeff_met4) = makehist(events4)
 
 if run_lifetimes12 or run_lifetimes1000 or run_lifetimes19:
-	allreturns5 = makehist(events5)
+	(allreturns5,hist2d5) = makehist(events5)
+	draw2d(hist2d5[0],5)
+	draw2d(hist2d5[1],5)
 	for h1,h2,h3,h4,h5 in zip(allreturns1,allreturns2,allreturns3,allreturns4,allreturns5):
 		drawall(h1,h2,h3,h4,h5)
 else:
 	for h1,h2,h3,h4 in zip(allreturns1,allreturns2,allreturns3,allreturns4):
 		drawall(h1,h2,h3,h4,None)
-	
-#	(hist_pt_met5,hist_eta_met5,hist_phi_met5,hist_pt_jet5,hist_eta_jet5,hist_phi_jet5,hist_pt_mu5,hist_eta_mu5,hist_phi_mu5,hist_vxy_mu5,hist_vz_mu5,hist_trigeffmet5,hist_trigeffdca5,hist_trigeffdz5,hist_recoeff_mu5,hist_recoeff_met5) = makehist(events5)
+
+draw2d(hist2d1[0],1)
+draw2d(hist2d2[0],2)
+draw2d(hist2d3[0],3)
+draw2d(hist2d4[0],4) 
+draw2d(hist2d1[1],1)
+draw2d(hist2d2[1],2)
+draw2d(hist2d3[1],3)
+draw2d(hist2d4[1],4) 
 #
-#	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,hist_pt_met5)
-#	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,hist_eta_met5)
-#	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,hist_phi_met5)
-#	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,hist_pt_jet5)
-#	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,hist_eta_jet5)
-#	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,hist_phi_jet5)
-#	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,hist_pt_mu5)
-#	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,hist_eta_mu5)
-#	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,hist_phi_mu5)
-#	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,hist_vxy_mu5)
-#	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,hist_vz_mu5)
-#	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,hist_trigeffmet5)
-#	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,hist_trigeffdca5)
-#	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,hist_trigeffdz5)
-#	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,hist_recoeff_mu5)
-#	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,hist_recoeff_met5)
-#
-#else:
-#	drawall(hist_pt_met1,hist_pt_met2,hist_pt_met3,hist_pt_met4,None)
-#	drawall(hist_eta_met1,hist_eta_met2,hist_eta_met3,hist_eta_met4,None)
-#	drawall(hist_phi_met1,hist_phi_met2,hist_phi_met3,hist_phi_met4,None)
-#	drawall(hist_pt_jet1,hist_pt_jet2,hist_pt_jet3,hist_pt_jet4,None)
-#	drawall(hist_eta_jet1,hist_eta_jet2,hist_eta_jet3,hist_eta_jet4,None)
-#	drawall(hist_phi_jet1,hist_phi_jet2,hist_phi_jet3,hist_phi_jet4,None)
-#	drawall(hist_pt_mu1,hist_pt_mu2,hist_pt_mu3,hist_pt_mu4,None)
-#	drawall(hist_eta_mu1,hist_eta_mu2,hist_eta_mu3,hist_eta_mu4,None)
-#	drawall(hist_phi_mu1,hist_phi_mu2,hist_phi_mu3,hist_phi_mu4,None)
-#	drawall(hist_vxy_mu1,hist_vxy_mu2,hist_vxy_mu3,hist_vxy_mu4,None)
-#	drawall(hist_vz_mu1,hist_vz_mu2,hist_vz_mu3,hist_vz_mu4,None)
-#	drawall(hist_trigeffmet1,hist_trigeffmet2,hist_trigeffmet3,hist_trigeffmet4,None)
-#	drawall(hist_trigeffdca1,hist_trigeffdca2,hist_trigeffdca3,hist_trigeffdca4,None)
-#	drawall(hist_trigeffdz1,hist_trigeffdz2,hist_trigeffdz3,hist_trigeffdz4,None)
-#	drawall(hist_recoeff_mu1,hist_recoeff_mu2,hist_recoeff_mu3,hist_recoeff_mu4,None)
-#	drawall(hist_recoeff_met1,hist_recoeff_met2,hist_recoeff_met3,hist_recoeff_met4,None)
