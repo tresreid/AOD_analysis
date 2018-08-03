@@ -27,67 +27,10 @@ jet,jetlabel = Handle("vector<reco::PFJet>"),("ak4PFJets","","RECO")
 ###############################################################################################################################
 #################Choose configuration to run
 ###############################################################################################################################
-run_masses = False
-run_lifetimes = False
 run_all = True
-#run_lifetimes12 = False
-#run_lifetimes19 = False
-#run_lifetimes1000 = True
 
 
 
-##################################################################################################################
-################SETUP FILES FOR LIFETIME COMPARISON
-##################################################################################################################
-# open files 
-if run_lifetimes:
-	#mass_split = "5p25_dMchi-0p5_"
-	mass_split = "60_dMchi-20_"
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe2/"
-	with open('filelist/lhe3.txt') as f:
-		rootfilesx = f.readlines()
-	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
-	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
-	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p1_" in x) ]
-	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1_" in x) ]
-	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-10_" in x) ]
-	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-100_" in x) ]
-#	rootfiles5 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1000_" in x) ]
-	print rootfiles1	
-	print rootfiles2
-	print rootfiles3
-	print rootfiles4
-#	print rootfiles5
-	events1 = Events(rootfiles1)
-	events2 = Events(rootfiles2)
-	events3 = Events(rootfiles3)
-	events4 = Events(rootfiles4)
-#	events5 = Events(rootfiles5)
-	savedir = "output/lifetimes/"
-###############################################################################################################
-############3SETUP FILES FOR MASS COMPARISON
-###############################################################################################################
-if run_masses:
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe2/"
-	lifetime = "ctau-1_"
-	with open('filelist/lhe3.txt') as f:
-		rootfilesx = f.readlines()
-	#rootfilesx = rootfilesx + rootfilesx+ rootfilesx + rootfilesx + rootfilesx
-	rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and lifetime in x)]# and 'ctau' not in x)]
-	rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-52p5_dMchi-5_" in x) ]
-	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-60_dMchi-20_" in x) ]
-	rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-5p25_dMchi-0p5_" in x) ]
-	rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("Mchi-6p0_dMchi-2p0_" in x) ]
-
-	print rootfiles1
-	print rootfiles2
-	print rootfiles3
-	print rootfiles4
-	events1 = Events(rootfiles1)
-	events2 = Events(rootfiles2)
-	events3 = Events(rootfiles3)
-	events4 = Events(rootfiles4)
-	savedir = "output/masses/"
 ##################################################################################################################
 ################SETUP FILES FOR ALL COMPARISON
 ##################################################################################################################
@@ -137,43 +80,39 @@ def norm(histogram):
 	else:
 		print "pass"
 def drawall(hist1,hist2,hist3,hist4,hist5,key,leglist,pp,sel, leg):
-	#c = ROOT.TCanvas("c","c",800,800)
 	pp.cd(sel+1)
+	
 	#format titles
-	name = savedir+"all_%s_%s.png"%(key,hist1.GetName())
-	namepdf = savedir+"all_%s_%s.pdf"%(key,hist1.GetName())
+	name = hist1.GetName()
 	xtitle = 'pt [GeV]' if ('pt' in name) else ('eta' if ('eta' in name) else ('phi' if ('phi' in name) else 'unknown'))
 	xtitle = xtitle if ('vertex' not in name) else ('dxy [cm]' if 'vxy' in name else ('dz [cm]' if 'vz' in name else 'v unknown'))
 	xtitle = xtitle if ('eff' not in name) else ('MET [GeV]' if 'met' in name else ('Mu pt [GeV]' if 'mu' in name else 'eff unknown'))
 	xtitle = xtitle if ('dR' not in name and 'dphi' not in name) else ('dR' if 'dR' in name else ('dPhi' if 'dphi' in name else 'angular separation unknown'))
 	hist1.GetXaxis().SetTitle(xtitle)
 	hist1.GetXaxis().SetTitleOffset(1.4)
+	
+	#set histogram format
 	hist1.SetLineColor(2)
 	hist2.SetLineColor(3)
 	hist3.SetLineColor(4)
 	hist4.SetLineColor(6)
 	if (hist5 is not None):
 		hist5.SetLineColor(5)
-		#setrange(hist01,hist1,hist10,hist50,hist100,hist300)
-	#hist1.SetMaximum(1.0)
-	#hist1.SetMinimum(0.0)
-	#hist1.GetYaxis().SetTitle("Efficiency")
 	hist1.SetMarkerColorAlpha(2,.6)
 	hist2.SetMarkerColorAlpha(3,.6)
 	hist3.SetMarkerColorAlpha(4,.6)
 	hist4.SetMarkerColorAlpha(6,.6)
 	if hist5 is not None:
-		hist5.SetMarkerColorAlpha(5,.6)
-		
+		hist5.SetMarkerColorAlpha(5,.6)	
 	hist1.SetMarkerStyle(8)
 	hist2.SetMarkerStyle(8)
 	hist3.SetMarkerStyle(8)
 	hist4.SetMarkerStyle(8)
 	if hist5 is not None:
 		hist5.SetMarkerStyle(8)
+
 	if 'eff' in name:
 		pp.SetLogy(0)
-	#	pp.Update()
 		print "eff: ",name 		
 		hist1.SetMaximum(1.0)
 		hist1.SetMinimum(0.0)
@@ -196,7 +135,6 @@ def drawall(hist1,hist2,hist3,hist4,hist5,key,leglist,pp,sel, leg):
 		setrange(hist1,hist2,hist3,hist4) if hist5 is None else setrange(hist1,hist2,hist3,hist4,hist5)
 		p1 = pp.cd(sel+1)
 		p1.SetLogy(1)
-		#pp.Update()
 		hist1.Draw('HIST')
 		hist2.Draw('HIST Same')
 		hist3.Draw('HIST Same')
@@ -204,32 +142,13 @@ def drawall(hist1,hist2,hist3,hist4,hist5,key,leglist,pp,sel, leg):
 		if hist5 is not None:
 			hist5.Draw('HIST Same')
 
-	if run_lifetimes:
-		leg = ROOT.TLegend(.75,.75,.95,.95)
-		leg.AddEntry(hist1,"0.1 cm","f")
-		leg.AddEntry(hist2,"1 cm","f")
-		leg.AddEntry(hist3,"10 cm","f")
-		leg.AddEntry(hist4,"100 cm","f")
-		if hist5 is not None:
-			leg.AddEntry(hist5,"1000 cm","f")
-	elif run_masses:
-		leg = ROOT.TLegend(.75,.75,.95,.95)
-		leg.AddEntry(hist1,"M=52.5+/- 2.5","f")
-		leg.AddEntry(hist2,"M=60 +/- 10","f")
-		leg.AddEntry(hist3,"M=5.25 +/- 0.25","f")
-		leg.AddEntry(hist4,"M=6 +/- 1.0","f")
-	else:	
-	#	leg = ROOT.TLegend(.75,.75,.95,.95)
-		for hist,li in zip([hist1,hist2,hist3,hist4],leglist):
-			leg.AddEntry(hist,li,"f")
+	
+	for hist,li in zip([hist1,hist2,hist3,hist4],leglist):
+		leg.AddEntry(hist,li,"f")
 	leg.Draw("same")
 	pp.Update()
-	#c.SaveAs(name)
-	#c.SaveAs(namepdf)
-	#del c
-	#pp.Print("output/%s_cutsel.pdf"%(key.replace(" ","_")))
-	#pp.Print("output/%s_cutsel%s.pdf"%(key.replace(" ","_"),sel))
-	#pp.Clear()
+
+
 def draw(histogram):
 	c = ROOT.TCanvas("c","c",800,800)
 	c.cd
@@ -245,30 +164,16 @@ def draw(histogram):
 		histogram.Draw('B')
 	c.SaveAs(name)
 	c.SaveAs(namepdf)
+
 def draw2d(histogram,title,pp,sel):
-	#c = ROOT.TCanvas("c","c",800,800)
 	pp.cd(sel+1)
-	#name = savedir+"2d%s_%s.png"%(num,histogram.GetName())
-	#namepdf = savedir+"2d%s_%s.pdf"%(num,histogram.GetName())
 	xtitle = 'eta' 
 	ytitle = 'MET [GeV]'
-	#titlesmass = ["M=52.5+/- 2.5","M=60 +/- 10","M=5.25 +/- 0.25","M=6 +/- 1.0"]
-	#titleslife = ["ctau: %s cm"%x for x in [.1,1,10,100,1000]]
-	#if run_masses:
-	#	title = titlesmass[num-1]
-	#else:
-	#	title = titleslife[num-1]
-	#if 'rec' in histogram.GetName():
-	#	title = 'Reco '+ title +"\n"+histogram.GetTitle()
-	#else:
-	#	title = 'Gen '+ title+ "\n"+histogram.GetTitle()
 	title = title + " "+histogram.GetTitle()
 	histogram.SetTitle(title)
 	histogram.GetXaxis().SetTitle(xtitle)
 	histogram.GetYaxis().SetTitle(ytitle)
 	histogram.Draw("COLZ")
-	#c.SaveAs(name)
-	#c.SaveAs(namepdf)
 
 def makehist(events):
 	# SET UP HISTOGRAMS*5
@@ -284,6 +189,8 @@ def makehist(events):
 	hist_phi_mu ={}
 	hist_vxy_mu ={}
 	hist_vz_mu ={}
+	hist_vz_mu_all ={}
+	hist_vxy_mu_all ={}
 	hist_pt_musub ={}
 	hist_eta_musub ={}
 	hist_phi_musub ={}
@@ -308,6 +215,8 @@ def makehist(events):
 	hist_phi_mu_rec ={}
 	hist_vxy_mu_rec ={}
 	hist_vz_mu_rec ={}
+	hist_vz_mu_all_rec ={}
+	hist_vxy_mu_all_rec ={}
 	hist_pt_musub_rec ={}
 	hist_eta_musub_rec ={}
 	hist_phi_musub_rec ={}
@@ -333,8 +242,8 @@ def makehist(events):
 		hist_phi_mu[sel]          = ROOT.TH1F("histphimu%s"%sel,"gen leading Mu phi: %s"%cut_sel[sel], 40,-6,6)
 		hist_vxy_mu[sel]          = ROOT.TH1F("histvertexvxymu%s"%sel,"gen leading Mu vxy: %s"%cut_sel[sel], 100,0,600)
 		hist_vz_mu[sel]           = ROOT.TH1F("histvertexvzmu%s"%sel,"gen leading Mu vz: %s"%cut_sel[sel], 50,-600,600)
-		#hist_vxy_mu_all[sel]      = ROOT.TH1F("histvertexvxymuall%s"%sel,"gen all Mu vxy\n%s"%cut_sel[sel], 50,0,600)
-	#	hist_vz_mu_all[sel]       = ROOT.TH1F("histvertexvzmuall%s"%sel,"gen all Mu vz\n%s"%cut_sel[sel], 50,-600,600)
+		hist_vxy_mu_all[sel]      = ROOT.TH1F("histvertexvxymuall%s"%sel,"gen all Mu vxy: %s"%cut_sel[sel], 50,0,600)
+		hist_vz_mu_all[sel]       = ROOT.TH1F("histvertexvzmuall%s"%sel,"gen all Mu vz: %s"%cut_sel[sel], 50,-600,600)
 		hist_pt_musub[sel]        = ROOT.TH1F("histptmusub%s"%sel,"gen subleading Mu pt: %s"%cut_sel[sel], 100,0,15)
 		hist_eta_musub[sel]       = ROOT.TH1F("histetamusub%s"%sel,"gen subleading Mu eta: %s"%cut_sel[sel], 40,-6,6)
 		hist_phi_musub[sel]       = ROOT.TH1F("histphimusub%s"%sel,"gen subleading Mu phi: %s"%cut_sel[sel], 40,-6,6)
@@ -359,6 +268,8 @@ def makehist(events):
 		hist_phi_mu_rec[sel]      = ROOT.TH1F("histphimurec%s"%sel,"reco leading Mu phi: %s"%cut_sel[sel], 40,-6,6)
 		hist_vxy_mu_rec[sel]      = ROOT.TH1F("histvertexvxymurec%s"%sel,"reco leading Mu vxy: %s"%cut_sel[sel], 100,0,600)
 		hist_vz_mu_rec[sel]       = ROOT.TH1F("histvertexvzmurec%s"%sel,"reco leading Mu vz: %s"%cut_sel[sel], 50,-600,600)
+		hist_vxy_mu_all_rec[sel]      = ROOT.TH1F("histvertexvxymuallrec%s"%sel,"reco all Mu vxy: %s"%cut_sel[sel], 50,0,600)
+		hist_vz_mu_all_rec[sel]       = ROOT.TH1F("histvertexvzmuallrec%s"%sel,"reco all Mu vz: %s"%cut_sel[sel], 50,-600,600)
 		hist_pt_musub_rec[sel]    = ROOT.TH1F("histptmusubrec%s"%sel,"reco subleading Mu pt: %s"%cut_sel[sel], 100,0,15)
 		hist_eta_musub_rec[sel]   = ROOT.TH1F("histetamusubrec%s"%sel,"reco subleading Mu eta: %s"%cut_sel[sel], 40,-6,6)
 		hist_phi_musub_rec[sel]   = ROOT.TH1F("histphimusubrec%s"%sel,"reco subleading Mu phi: %s"%cut_sel[sel], 40,-6,6)
@@ -386,54 +297,7 @@ def makehist(events):
 	hist_recoeff_denom_mu  = ROOT.TH1F("histrecoeffdenommumet","recoeff mu denominator", 50,0,50)
 	hist_recoeff_num_mu    = ROOT.TH1F("histrecoeffnummumet","recoefficiency mu", 50,0,50)
 	hist_recoeff_denom_met = ROOT.TH1F("histrecoeffdenommet","recoeff met denominator", 50,0,200)
-	hist_recoeff_num_met   = ROOT.TH1F("histrecoeffnummet","recoefficiency met", 50,0,200)
-	
-#	hist_pt_met.Sumw2()
-#	hist_eta_met.Sumw2()
-#	hist_phi_met.Sumw2()
-#	hist_pt_jet.Sumw2()
-#	hist_eta_jet.Sumw2()
-#	hist_phi_jet.Sumw2()
-#	hist_pt_mu.Sumw2()
-#	hist_eta_mu.Sumw2()
-#	hist_phi_mu.Sumw2()
-#	hist_vxy_mu.Sumw2()
-#	hist_vz_mu.Sumw2()
-#	hist_pt_musub.Sumw2()
-#	hist_eta_musub.Sumw2()
-#	hist_phi_musub.Sumw2()
-#	hist_vxy_musub.Sumw2()
-#	hist_vz_musub.Sumw2()
-#	hist_dR_mu.Sumw2()
-#	hist_dphi_metmu.Sumw2()
-#	hist_dphi_mumu.Sumw2()
-#	hist_dphi_metjet.Sumw2()
-#	hist_num_mu.Sumw2()
-#	hist_num_jet.Sumw2()
-#
-#	hist_pt_met_rec.Sumw2()
-#	hist_eta_met_rec.Sumw2()
-#	hist_phi_met_rec.Sumw2()
-#	hist_pt_jet_rec.Sumw2()
-#	hist_eta_jet_rec.Sumw2()
-#	hist_phi_jet_rec.Sumw2()
-#	hist_pt_mu_rec.Sumw2()
-#	hist_eta_mu_rec.Sumw2()
-#	hist_phi_mu_rec.Sumw2()
-#	hist_vxy_mu_rec.Sumw2()
-#	hist_vz_mu_rec.Sumw2()
-#	hist_pt_musub_rec.Sumw2()
-#	hist_eta_musub_rec.Sumw2()
-#	hist_phi_musub_rec.Sumw2()
-#	hist_vxy_musub_rec.Sumw2()
-#	hist_vz_musub_rec.Sumw2()
-#	hist_dR_mu_rec.Sumw2()
-#	hist_dphi_metmu_rec.Sumw2()
-#	hist_dphi_mumu_rec.Sumw2()
-#	hist_dphi_metjet_rec.Sumw2()
-#	hist_num_mu_rec.Sumw2()
-#	hist_num_jet_rec.Sumw2()
-	
+	hist_recoeff_num_met   = ROOT.TH1F("histrecoeffnummet","recoefficiency met", 50,0,200)	
 	
 	hist_trigeff_denom1mu.Sumw2()
 	hist_trigeff_num1mu.Sumw2()
@@ -458,6 +322,7 @@ def makehist(events):
 	for iev,event in enumerate(events):
 		if (iev %100 ==0):
 			print "Event %d: run %6d, lumi %4d, event %12d" % (iev,event.eventAuxiliary().run(), event.eventAuxiliary().luminosityBlock(),event.eventAuxiliary().event())
+
 		# setup trigger and reconstruction counters and bools
 		denominator_trig1 = False # 
 		numerator_trig1 = False # 
@@ -598,7 +463,6 @@ def makehist(events):
 				if gmutrack.pt() >2.0:
 					genselection4_counter +=1
 		for gjtrack in genjettracks:
-			#if gjtrack.pt() > 20.0:
 			genjetcount +=1
 			if gjtrack.pt() > leadingGenJet_pt:
 				leadingGenJet_pt  =gjtrack.pt()	
@@ -611,41 +475,11 @@ def makehist(events):
 				leadingGenMet_eta = gmtrack.eta()
 				leadingGenMet_phi = gmtrack.phi()
 			if gmtrack.pt()>20.0:
-				denom_count_reco_met +=1
-
-
-	#		print "gtrack: ", gtrack.pt(), gtrack.eta()
-#		if not leadingGenMu_pt == 0.0:
-#			hist_pt_mu.Fill(leadingGenMu_pt)
-#			hist_eta_mu.Fill(leadingGenMu_eta)
-#			hist_phi_mu.Fill(leadingGenMu_phi)
-#			hist_vxy_mu.Fill(leadingGenMu_vxy)
-#			hist_vz_mu.Fill(leadingGenMu_vz)
-#			hist_dphi_mumu.Fill(abs(leadingGenSubMu_phi-leadingGenMu_phi))
-#			hist_dR_mu.Fill((float(leadingGenMet_eta-leadingGenMu_eta)**2 +float(leadingGenMet_phi-leadingGenMu_phi)**2)**(0.5))
-#			if not leadingGenSubMu_pt ==0.0:
-#				hist_pt_musub.Fill(leadingGenSubMu_pt)
-#				hist_eta_musub.Fill(leadingGenSubMu_eta)
-#				hist_phi_musub.Fill(leadingGenSubMu_phi)
-#				hist_vxy_musub.Fill(leadingGenSubMu_vxy)
-#				hist_vz_musub.Fill(leadingGenSubMu_vz)
-#		hist_pt_jet.Fill(leadingGenJet_pt)
-#		hist_eta_jet.Fill(leadingGenJet_eta)
-#		hist_phi_jet.Fill(leadingGenJet_phi)
-#		hist_pt_met.Fill(leadingGenMet_pt)
-#		hist_eta_met.Fill(leadingGenMet_eta)
-#		hist_etapt_met.Fill(leadingGenMet_eta,leadingGenMet_pt)
-#		hist_phi_met.Fill(leadingGenMet_phi)
-#		hist_dphi_metmu.Fill(abs(leadingGenMet_phi-leadingGenMu_phi))
-#		hist_dphi_metjet.Fill(abs(leadingGenMet_phi - leadingGenJet_phi))
-#		hist_num_jet.Fill(genjetcount)
-#		hist_num_mu.Fill(genmucount)
-	
+				denom_count_reco_met +=1	
 
 
 	#run over jet information to add up ht information
 		for jtrack in jettracks:
-			#if jtrack.pt() > 20.0:
 			reco_genjetcount +=1
 			#print jtrack.pt()
 			if jtrack.pt() > reco_leadingGenJet_pt:
@@ -726,7 +560,6 @@ def makehist(events):
 #3. j1pT>120GeV, at most two jets with pT>30GeV 
 #4. at least two muons with pT >2GeV, eta<2.5 (this step for gen-level only)
 		for sel in range(5):
-		#	print sel
 			cutpass = False
 			cutpassrec = False
 			if sel == 0:
@@ -736,9 +569,7 @@ def makehist(events):
 				cutpass = (genjetcount >= 1 and leadingGenJet_pt > 30)
 				cutpassrec = (reco_genjetcount >= 1 and reco_leadingGenJet_pt > 30)
 			elif sel == 2:
-			#	print "sel 2"
 				cutpass= (leadingGenMet_pt > 120)
-			#	print leadingGenMet_pt, cutpass
 				cutpassrec= (reco_leadingGenMet_pt > 120)
 			elif sel == 3:
 				cutpass = (genselection3_counter <=2 and leadingGenJet_pt >120)
@@ -751,6 +582,9 @@ def makehist(events):
 				cutpassrec = False	
 			if cutpass:	
 				nevents[sel] += 1
+				for gmutrack in genmutracks:
+					hist_vxy_mu_all[sel].Fill((float(gmutrack.vx()**2)+float(gmutrack.vy()**2)**2)**(0.5))
+					hist_vz_mu_all[sel].Fill(gmutrack.vz())
 				if not leadingGenMu_pt == 0.0:
 					hist_pt_mu[sel].Fill(leadingGenMu_pt)
 					hist_eta_mu[sel].Fill(leadingGenMu_eta)
@@ -779,6 +613,9 @@ def makehist(events):
 ###########################3 Fill reco plots#####################
 			if cutpassrec:
 				nevents_rec[sel] += 1
+				for track in mutracks:
+					hist_vxy_mu_all_rec[sel].Fill((float(track.vx()**2)+float(track.vy()**2)**2)**(0.5))
+					hist_vz_mu_all_rec[sel].Fill(track.vz())
 				if not reco_leadingGenMu_pt == 0.0:
 					hist_pt_mu_rec[sel].Fill(reco_leadingGenMu_pt)
 					hist_eta_mu_rec[sel].Fill(reco_leadingGenMu_eta)
@@ -812,29 +649,14 @@ def makehist(events):
 	    	names = event.object().triggerNames(triggerBits.product())
 	    	for i in xrange(triggerBits.product().size()):
 			if "HLT_PFMET120_PFMHT120_IDTight_v" in names.triggerName(i):
-	        		#print "Trigger ", names.triggerName(i), ": ", ("PASS" if triggerBits.product().accept(i) else "fail (or not run)")
-	        		#if triggerBits.product().accept(i):
-		#			print "Trigger ", names.triggerName(i), ": ", ("PASS" if denominator_trig1 else "fail (denom)")
 				if triggerBits.product().accept(i) and denominator_trig1:
 					numerator_trig1 = True
-			#	elif denominator_trig1:
-		#			print "bad hit 1"
 			if "HLT_DoubleMu3_DCA_PFMET50_PFMHT60_v" in names.triggerName(i):
-	        		#print "Trigger ", names.triggerName(i), ": ", ("PASS" if triggerBits.product().accept(i) else "fail (or not run)")
-	        	#	if triggerBits.product().accept(i):
-		#			print "Trigger ", names.triggerName(i), ": ", ("PASS" if denominator_trig2 else "fail (denom) %s %s %s"%(ht,trig2_met,trig2_mucount))
 				if triggerBits.product().accept(i) and denominator_trig2:
 					numerator_trig2 = True
-			#	elif denominator_trig2:
-		#			print "bad hit 2"
 			if "HLT_DoubleMu3_DZ_PFMET50_PFMHT60_v" in names.triggerName(i):
-	        		#print "Trigger ", names.triggerName(i), ": ", ("PASS" if triggerBits.product().accept(i) else "fail (or not run)")
-	        	#	if triggerBits.product().accept(i):
-		#			print "Trigger ", names.triggerName(i), ": ", ("PASS" if denominator_trig2 else "fail (denom) %s %s %s"%(ht,trig2_met,trig2_mucount))
 				if triggerBits.product().accept(i) and denominator_trig3:
 					numerator_trig3 = True
-			#	elif denominator_trig3:
-		#			print "bad hit 3"
 		if denominator_trig1:
 			hist_trigeff_denom1met.Fill(leadingGenMet_pt)
 			hist_trigeff_denom1mu.Fill(leadingGenMu_pt)
@@ -896,14 +718,14 @@ def makehist(events):
 
 	metgen = [hist_pt_met,hist_eta_met,hist_phi_met]
 	jetgen = [hist_pt_jet,hist_eta_jet,hist_phi_jet]
-	mugen  = [hist_pt_mu,hist_eta_mu,hist_phi_mu,hist_vxy_mu,hist_vz_mu]#,hist_vxy_mu_all,hist_vz_mu_all]
+	mugen  = [hist_pt_mu,hist_eta_mu,hist_phi_mu,hist_vxy_mu,hist_vz_mu,hist_vxy_mu_all,hist_vz_mu_all]
 	mugens = [hist_pt_musub,hist_eta_musub,hist_phi_musub,hist_vxy_musub,hist_vz_musub]
 	angular_sep = 	[hist_dR_mu,hist_dphi_metmu,hist_dphi_mumu,hist_dphi_metjet]
 	nums = [hist_num_mu,hist_num_jet]
 	
 	metgenrec = [hist_pt_met_rec,hist_eta_met_rec,hist_phi_met_rec]
 	jetgenrec = [hist_pt_jet_rec,hist_eta_jet_rec,hist_phi_jet_rec]
-	mugenrec  = [hist_pt_mu_rec,hist_eta_mu_rec,hist_phi_mu_rec,hist_vxy_mu_rec,hist_vz_mu_rec]
+	mugenrec  = [hist_pt_mu_rec,hist_eta_mu_rec,hist_phi_mu_rec,hist_vxy_mu_rec,hist_vz_mu_rec,hist_vxy_mu_all_rec,hist_vz_mu_all_rec]
 	mugensrec = [hist_pt_musub_rec,hist_eta_musub_rec,hist_phi_musub_rec,hist_vxy_musub_rec,hist_vz_musub_rec]
 	angular_seprec = [hist_dR_mu_rec,hist_dphi_metmu_rec,hist_dphi_mumu_rec,hist_dphi_metjet_rec]
 	numsrec = [hist_num_mu_rec,hist_num_jet_rec]
@@ -912,15 +734,13 @@ def makehist(events):
 	trigsmu =[hist_trigeff1mu,hist_trigeff2mu,hist_trigeff3mu]
 	trigsmet=[hist_trigeff1met,hist_trigeff2met,hist_trigeff3met]
 	recos  = [hist_recoeff_mu,hist_recoeff_met]
+
 	allreturnsgen = metgen+jetgen+mugen+mugens+angular_sep+nums
-	allreturnsrec = metgenrec+jetgenrec+mugenrec+mugensrec+angular_seprec+numsrec
-	
-	allreturns["hist"] = allreturnsgen+allreturnsrec# +trigsmu+trigsmet+recos
+	allreturnsrec = metgenrec+jetgenrec+mugenrec+mugensrec+angular_seprec+numsrec	
+	allreturns["hist"] = allreturnsgen+allreturnsrec
 	allreturns["eff"] = trigsmu+trigsmet+recos
 	allreturns["hist2d"] = [hist_etapt_met,hist_etapt_met_rec]
 	allreturns["nevents"] = nevents
-	#allreturns = metgen+jetgen+mugen+mugens+trigsmu+trigsmet+recos+angular_sep
-	#return (allreturns,hist2d)
 	return allreturns
 if not run_all:
 	(allreturns1,hist2d1) = makehist(events1)
@@ -929,21 +749,19 @@ if not run_all:
 	(allreturns4,hist2d4) = makehist(events4)
 	
 	if run_lifetimes:
-	#	(allreturns5,hist2d5) = makehist(events5)
-	#	draw2d(hist2d5[0],5)
-	#	draw2d(hist2d5[1],5)
-	#	for h1,h2,h3,h4,h5 in zip(allreturns1,allreturns2,allreturns3,allreturns4,allreturns5):
-	#		drawall(h1,h2,h3,h4,h5)
 		for h1,h2,h3,h4 in zip(allreturns1,allreturns2,allreturns3,allreturns4):
 			drawall(h1,h2,h3,h4,None)
 	else:
 		for h1,h2,h3,h4 in zip(allreturns1,allreturns2,allreturns3,allreturns4):
 			drawall(h1,h2,h3,h4,None)
+
+
+
 elif run_all:
         print "running all"
-        mass_splitlist1 = ["5p25_dMchi-0p5_","6p0_dMchi-2p0_","52p5_dMchi-5_","60_dMchi-20_"]
-        mass_splitlist2 = ["5 GeV (10%)","5 GeV (40%)","50 GeV (10%)","50 GeV (40%)"]
-        lifelist = ["ctau 0p1cm"]#,"ctau 1cm","ctau 10cm","ctau 100cm"]
+        mass_splitlist1 = ["5p25_dMchi-0p5_"]#,"6p0_dMchi-2p0_","52p5_dMchi-5_","60_dMchi-20_"]
+        mass_splitlist2 = ["5 GeV (10%)"]#,"5 GeV (40%)","50 GeV (10%)","50 GeV (40%)"]
+        lifelist = ["ctau 0p1cm","ctau 1cm","ctau 10cm","ctau 100cm"]
         plots_dicmass = {}
         plots2d_dicmass = {}
         plotseff_dicmass = {}
@@ -1021,99 +839,5 @@ def saveplots(plots_dic,plotseff_dic,plots2d_dic,counts_dic,olist):
 		del pp
 
 
-#saveplots(plots_dicmass,plotseff_dicmass,plots2d_dicmass,counts_dicmass,lifelist)
-saveplots(plots_diclife,plotseff_diclife,plots2d_diclife,counts_diclife,mass_splitlist2)
-#	for key in plots_dicmass:
-#		pp = ROOT.TCanvas("pp","pp",800,800)
-#		t1 = ROOT.TText(0.5,0.5,key)
-#	  	t1.SetTextAlign(22);
-#		t1.SetTextSize(0.05);
-#		t1.Draw();
-#		nevents_text = {}
-#		for i,li in enumerate(lifelist):
-#			ypos = 0.4-i*.05
-#			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_dicmass[key][i][0],counts_dicmass[key][i][1],counts_dicmass[key][i][2],counts_dicmass[key][i][3],counts_dicmass[key][i][4]))
-#			nevents_text[i].SetTextAlign(22)
-#			nevents_text[i].SetTextSize(0.03)
-#			nevents_text[i].Draw() 
-#	 
-#		pp.Print("output2/%s_cutsel.pdf("%(key.replace(" ","_")))
-#		pp.Clear()
-#		pp.Divide(2,3)
-#		for h1,h2,h3,h4 in zip(plots_dicmass[key][0],plots_dicmass[key][1],plots_dicmass[key][2],plots_dicmass[key][3]):
-#			leg = {}
-#			for sel in range(5):
-#				leg[sel] = ROOT.TLegend(.70,.70,.85,.85)
-#				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,lifelist,pp,sel,leg[sel])
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		for i,h in enumerate(plots2d_dicmass[key]):
-#			for hi in h:
-#				for sel in range(5):
-#					draw2d(hi[sel],lifelist[i],pp,sel)
-#					print hi[sel].GetName()
-#				pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		pp.Clear()	
-#		pp.cd(0)	
-#		t2 = ROOT.TText(0.5,0.5,"efficiencies")
-#	  	t2.SetTextAlign(22);
-#		t2.SetTextSize(0.05);
-#		t2.Draw();
-#		pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		for h1,h2,h3,h4 in zip(plotseff_dicmass[key][0],plotseff_dicmass[key][1],plotseff_dicmass[key][2],plotseff_dicmass[key][3]):
-#			leg = ROOT.TLegend(.70,.70,.85,.85)
-#			drawall(h1,h2,h3,h4,None,key,lifelist,pp,-1,leg)
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		pp.Print("output2/%s_cutsel.pdf)"%(key.replace(" ","_")))
-#		del pp
-#
-#
-#	for key in plots_diclife:			
-#		pp = ROOT.TCanvas("pp","pp",800,800)
-#		t1 = ROOT.TText(0.5,0.5,key)
-#	  	t1.SetTextAlign(22);
-#		t1.SetTextSize(0.05);
-#		t1.Draw();
-#		nevents_text = {}
-#		for i,li in enumerate(mass_splitlist2):
-#			ypos = 0.4-i*.05
-#			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_diclife[key][i][0],counts_diclife[key][i][1],counts_diclife[key][i][2],counts_diclife[key][i][3],counts_diclife[key][i][4]))
-#			nevents_text[i].SetTextAlign(22)
-#			nevents_text[i].SetTextSize(0.03)
-#			nevents_text[i].Draw() 
-#	 
-#		pp.Print("output2/%s_cutsel.pdf("%(key.replace(" ","_")))
-#		pp.Clear()
-#		pp.Divide(2,3)
-#		for h1,h2,h3,h4 in zip(plots_diclife[key][0],plots_diclife[key][1],plots_diclife[key][2],plots_diclife[key][3]):
-#			leg = {}
-#			for sel in range(5):
-#				leg[sel] = ROOT.TLegend(.70,.70,.85,.85)
-#				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,mass_splitlist2,pp,sel,leg[sel])
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		for i,h in enumerate(plots2d_diclife[key]):
-#			for hi in h:
-#				for sel in range(5):
-#					draw2d(hi[sel],mass_splitlist[i],pp,sel)
-#					print hi[sel].GetName()
-#				pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		pp.Clear()	
-#		pp.cd(0)	
-#		t2 = ROOT.TText(0.5,0.5,"efficiencies")
-#	  	t2.SetTextAlign(22);
-#		t2.SetTextSize(0.05);
-#		t2.Draw();
-#		pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		for h1,h2,h3,h4 in zip(plotseff_diclife[key][0],plotseff_diclife[key][1],plotseff_diclife[key][2],plotseff_diclife[key][3]):
-#			leg = ROOT.TLegend(.70,.70,.85,.85)
-#			drawall(h1,h2,h3,h4,None,key,mass_splitlist2,pp,-1,leg)
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		pp.Print("output2/%s_cutsel.pdf)"%(key.replace(" ","_")))
-#		del pp
-#
-#
-#
-#
+saveplots(plots_dicmass,plotseff_dicmass,plots2d_dicmass,counts_dicmass,lifelist)
+#saveplots(plots_diclife,plotseff_diclife,plots2d_diclife,counts_diclife,mass_splitlist2)
