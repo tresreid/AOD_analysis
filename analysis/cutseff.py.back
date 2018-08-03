@@ -95,9 +95,9 @@ if run_masses:
 if run_all:
 	#mass_split = "5p25_dMchi-0p5_"
 	mass_splitlist = ["5p25_dMchi-0p5_","6p0_dMchi-2p0_","52p5_dMchi-5_","60_dMchi-20_"]
-	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe2/"
+	rootprefix="root://cmseos.fnal.gov//store/user/mreid/standaloneComp/iDM/lhe250/"
 	event_dic = {}
-	with open('filelist/lhe3.txt') as f:
+	with open('filelist/redone250.txt') as f:
 		#print f.readlines()
 		rootfilesx = f.readlines()
 	for mass_split in mass_splitlist:
@@ -105,19 +105,19 @@ if run_all:
 		rootfiles = [x.strip() for x in rootfilesx if ("_AOD" in x and mass_split in x)]
 		#print rootfiles
 		rootfiles1 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-0p1_" in x) ]
-		rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1_" in x) ]
+	#	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1_" in x) ]
 		rootfiles3 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-10_" in x) ]
 		rootfiles4 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-100_" in x) ]
-	#	rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1000_" in x) ]
+		rootfiles2 = [rootprefix+"%s"%(x.strip()) for x in rootfiles if ("_ctau-1000_" in x) ]
 		print rootfiles1	
 		print rootfiles2
 		print rootfiles3
 		print rootfiles4
 #	print rootfiles5
-		events1 = Events(rootfiles1[:1])
-		events2 = Events(rootfiles2[:1])
-		events3 = Events(rootfiles3[:1])
-		events4 = Events(rootfiles4[:1])
+		events1 = Events(rootfiles1)
+		events2 = Events(rootfiles2)
+		events3 = Events(rootfiles3)
+		events4 = Events(rootfiles4)
 		event_dic[mass_split] = [events1,events2,events3,events4]
 #	events5 = Events(rootfiles5)
 	savedir = "output/allplots/"
@@ -319,7 +319,7 @@ def makehist(events):
 	hist_dphi_metjet_rec ={}
 	hist_num_mu_rec ={}
 	hist_num_jet_rec ={}
-	cut_sel = ["no cuts","n_jet >=1, j1pt > 30 GeV","MET > 120 GeV", "j1pt >120, at most 2 jets w/ pt >30 GeV","at least 2 mu w/ pt > 2 GeV and eta<2.5"]
+	cut_sel = ["no cuts","n_jet >=1, j1pt > 30 GeV","MET > 120 GeV", "j1pt >120, at most 2 jets w/ pt >30 GeV","at least 2 mu w/ pt ? 2 GeV and eta<2.5"]
 	for sel in range(5):
 		hist_pt_met[sel]          = ROOT.TH1F("histptmet%s"%sel,"gen leading MET: %s"%cut_sel[sel], 100,0,200)
 		hist_eta_met[sel]         = ROOT.TH1F("histetamet%s"%sel,"gen leading Met eta: %s"%cut_sel[sel], 40,-6,6)
@@ -943,7 +943,7 @@ elif run_all:
         print "running all"
         mass_splitlist1 = ["5p25_dMchi-0p5_","6p0_dMchi-2p0_","52p5_dMchi-5_","60_dMchi-20_"]
         mass_splitlist2 = ["5 GeV (10%)","5 GeV (40%)","50 GeV (10%)","50 GeV (40%)"]
-        lifelist = ["ctau 0p1cm"]#,"ctau 1cm","ctau 10cm","ctau 100cm"]
+        lifelist = ["ctau 0p1cm","ctau 1cm","ctau 10cm","ctau 100cm"]
         plots_dicmass = {}
         plots2d_dicmass = {}
         plotseff_dicmass = {}
@@ -974,17 +974,17 @@ elif run_all:
                         counts_diclife[life].append(all_ret["nevents"])
 
 
-def saveplots(plots_dic,plotseff_dic,plots2d_dic,counts_dic,olist):
-	for key in plots_dic:
+
+	for key in plots_dicmass:
 		pp = ROOT.TCanvas("pp","pp",800,800)
 		t1 = ROOT.TText(0.5,0.5,key)
 	  	t1.SetTextAlign(22);
 		t1.SetTextSize(0.05);
 		t1.Draw();
 		nevents_text = {}
-		for i,li in enumerate(olist):
+		for i,li in enumerate(lifelist):
 			ypos = 0.4-i*.05
-			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_dic[key][i][0],counts_dic[key][i][1],counts_dic[key][i][2],counts_dic[key][i][3],counts_dic[key][i][4]))
+			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_dicmass[key][i][0],counts_dicmass[key][i][1],counts_dicmass[key][i][2],counts_dicmass[key][i][3],counts_dicmass[key][i][4]))
 			nevents_text[i].SetTextAlign(22)
 			nevents_text[i].SetTextSize(0.03)
 			nevents_text[i].Draw() 
@@ -992,17 +992,17 @@ def saveplots(plots_dic,plotseff_dic,plots2d_dic,counts_dic,olist):
 		pp.Print("output2/%s_cutsel.pdf("%(key.replace(" ","_")))
 		pp.Clear()
 		pp.Divide(2,3)
-		for h1,h2,h3,h4 in zip(plots_dic[key][0],plots_dic[key][1],plots_dic[key][2],plots_dic[key][3]):
+		for h1,h2,h3,h4 in zip(plots_dicmass[key][0],plots_dicmass[key][1],plots_dicmass[key][2],plots_dicmass[key][3]):
 			leg = {}
 			for sel in range(5):
 				leg[sel] = ROOT.TLegend(.70,.70,.85,.85)
-				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,olist,pp,sel,leg[sel])
+				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,lifelist,pp,sel,leg[sel])
 			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
 			del leg
-		for i,h in enumerate(plots2d_dic[key]):
+		for i,h in enumerate(plots2d_dicmass[key]):
 			for hi in h:
 				for sel in range(5):
-					draw2d(hi[sel],olist[i],pp,sel)
+					draw2d(hi[sel],lifelist[i],pp,sel)
 					print hi[sel].GetName()
 				pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
 		pp.Clear()	
@@ -1012,108 +1012,60 @@ def saveplots(plots_dic,plotseff_dic,plots2d_dic,counts_dic,olist):
 		t2.SetTextSize(0.05);
 		t2.Draw();
 		pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-		for h1,h2,h3,h4 in zip(plotseff_dic[key][0],plotseff_dic[key][1],plotseff_dic[key][2],plotseff_dic[key][3]):
+		for h1,h2,h3,h4 in zip(plotseff_dicmass[key][0],plotseff_dicmass[key][1],plotseff_dicmass[key][2],plotseff_dicmass[key][3]):
 			leg = ROOT.TLegend(.70,.70,.85,.85)
-			drawall(h1,h2,h3,h4,None,key,olist,pp,-1,leg)
+			drawall(h1,h2,h3,h4,None,key,lifelist,pp,-1,leg)
 			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
 			del leg
 		pp.Print("output2/%s_cutsel.pdf)"%(key.replace(" ","_")))
 		del pp
 
 
-#saveplots(plots_dicmass,plotseff_dicmass,plots2d_dicmass,counts_dicmass,lifelist)
-saveplots(plots_diclife,plotseff_diclife,plots2d_diclife,counts_diclife,mass_splitlist2)
-#	for key in plots_dicmass:
-#		pp = ROOT.TCanvas("pp","pp",800,800)
-#		t1 = ROOT.TText(0.5,0.5,key)
-#	  	t1.SetTextAlign(22);
-#		t1.SetTextSize(0.05);
-#		t1.Draw();
-#		nevents_text = {}
-#		for i,li in enumerate(lifelist):
-#			ypos = 0.4-i*.05
-#			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_dicmass[key][i][0],counts_dicmass[key][i][1],counts_dicmass[key][i][2],counts_dicmass[key][i][3],counts_dicmass[key][i][4]))
-#			nevents_text[i].SetTextAlign(22)
-#			nevents_text[i].SetTextSize(0.03)
-#			nevents_text[i].Draw() 
-#	 
-#		pp.Print("output2/%s_cutsel.pdf("%(key.replace(" ","_")))
-#		pp.Clear()
-#		pp.Divide(2,3)
-#		for h1,h2,h3,h4 in zip(plots_dicmass[key][0],plots_dicmass[key][1],plots_dicmass[key][2],plots_dicmass[key][3]):
-#			leg = {}
-#			for sel in range(5):
-#				leg[sel] = ROOT.TLegend(.70,.70,.85,.85)
-#				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,lifelist,pp,sel,leg[sel])
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		for i,h in enumerate(plots2d_dicmass[key]):
-#			for hi in h:
-#				for sel in range(5):
-#					draw2d(hi[sel],lifelist[i],pp,sel)
-#					print hi[sel].GetName()
-#				pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		pp.Clear()	
-#		pp.cd(0)	
-#		t2 = ROOT.TText(0.5,0.5,"efficiencies")
-#	  	t2.SetTextAlign(22);
-#		t2.SetTextSize(0.05);
-#		t2.Draw();
-#		pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		for h1,h2,h3,h4 in zip(plotseff_dicmass[key][0],plotseff_dicmass[key][1],plotseff_dicmass[key][2],plotseff_dicmass[key][3]):
-#			leg = ROOT.TLegend(.70,.70,.85,.85)
-#			drawall(h1,h2,h3,h4,None,key,lifelist,pp,-1,leg)
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		pp.Print("output2/%s_cutsel.pdf)"%(key.replace(" ","_")))
-#		del pp
-#
-#
-#	for key in plots_diclife:			
-#		pp = ROOT.TCanvas("pp","pp",800,800)
-#		t1 = ROOT.TText(0.5,0.5,key)
-#	  	t1.SetTextAlign(22);
-#		t1.SetTextSize(0.05);
-#		t1.Draw();
-#		nevents_text = {}
-#		for i,li in enumerate(mass_splitlist2):
-#			ypos = 0.4-i*.05
-#			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_diclife[key][i][0],counts_diclife[key][i][1],counts_diclife[key][i][2],counts_diclife[key][i][3],counts_diclife[key][i][4]))
-#			nevents_text[i].SetTextAlign(22)
-#			nevents_text[i].SetTextSize(0.03)
-#			nevents_text[i].Draw() 
-#	 
-#		pp.Print("output2/%s_cutsel.pdf("%(key.replace(" ","_")))
-#		pp.Clear()
-#		pp.Divide(2,3)
-#		for h1,h2,h3,h4 in zip(plots_diclife[key][0],plots_diclife[key][1],plots_diclife[key][2],plots_diclife[key][3]):
-#			leg = {}
-#			for sel in range(5):
-#				leg[sel] = ROOT.TLegend(.70,.70,.85,.85)
-#				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,mass_splitlist2,pp,sel,leg[sel])
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		for i,h in enumerate(plots2d_diclife[key]):
-#			for hi in h:
-#				for sel in range(5):
-#					draw2d(hi[sel],mass_splitlist[i],pp,sel)
-#					print hi[sel].GetName()
-#				pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		pp.Clear()	
-#		pp.cd(0)	
-#		t2 = ROOT.TText(0.5,0.5,"efficiencies")
-#	  	t2.SetTextAlign(22);
-#		t2.SetTextSize(0.05);
-#		t2.Draw();
-#		pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#		for h1,h2,h3,h4 in zip(plotseff_diclife[key][0],plotseff_diclife[key][1],plotseff_diclife[key][2],plotseff_diclife[key][3]):
-#			leg = ROOT.TLegend(.70,.70,.85,.85)
-#			drawall(h1,h2,h3,h4,None,key,mass_splitlist2,pp,-1,leg)
-#			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
-#			del leg
-#		pp.Print("output2/%s_cutsel.pdf)"%(key.replace(" ","_")))
-#		del pp
-#
-#
-#
-#
+	for key in plots_diclife:			
+		pp = ROOT.TCanvas("pp","pp",800,800)
+		t1 = ROOT.TText(0.5,0.5,key)
+	  	t1.SetTextAlign(22);
+		t1.SetTextSize(0.05);
+		t1.Draw();
+		nevents_text = {}
+		for i,li in enumerate(mass_splitlist2):
+			ypos = 0.4-i*.05
+			nevents_text[i] = ROOT.TText(0.5,ypos,"\n nevents %s: %s(c1:%s,c2:%s,c3:%s,c4:%s)"%(li,counts_diclife[key][i][0],counts_diclife[key][i][1],counts_diclife[key][i][2],counts_diclife[key][i][3],counts_diclife[key][i][4]))
+			nevents_text[i].SetTextAlign(22)
+			nevents_text[i].SetTextSize(0.03)
+			nevents_text[i].Draw() 
+	 
+		pp.Print("output2/%s_cutsel.pdf("%(key.replace(" ","_")))
+		pp.Clear()
+		pp.Divide(2,3)
+		for h1,h2,h3,h4 in zip(plots_diclife[key][0],plots_diclife[key][1],plots_diclife[key][2],plots_diclife[key][3]):
+			leg = {}
+			for sel in range(5):
+				leg[sel] = ROOT.TLegend(.70,.70,.85,.85)
+				drawall(h1[sel],h2[sel],h3[sel],h4[sel],None,key,mass_splitlist2,pp,sel,leg[sel])
+			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
+			del leg
+		for i,h in enumerate(plots2d_diclife[key]):
+			for hi in h:
+				for sel in range(5):
+					draw2d(hi[sel],mass_splitlist[i],pp,sel)
+					print hi[sel].GetName()
+				pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
+		pp.Clear()	
+		pp.cd(0)	
+		t2 = ROOT.TText(0.5,0.5,"efficiencies")
+	  	t2.SetTextAlign(22);
+		t2.SetTextSize(0.05);
+		t2.Draw();
+		pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
+		for h1,h2,h3,h4 in zip(plotseff_diclife[key][0],plotseff_diclife[key][1],plotseff_diclife[key][2],plotseff_diclife[key][3]):
+			leg = ROOT.TLegend(.70,.70,.85,.85)
+			drawall(h1,h2,h3,h4,None,key,mass_splitlist2,pp,-1,leg)
+			pp.Print("output2/%s_cutsel.pdf"%(key.replace(" ","_")))
+			del leg
+		pp.Print("output2/%s_cutsel.pdf)"%(key.replace(" ","_")))
+		del pp
+
+
+
+
