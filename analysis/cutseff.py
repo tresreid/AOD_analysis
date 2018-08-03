@@ -759,8 +759,8 @@ if not run_all:
 
 elif run_all:
         print "running all"
-        mass_splitlist1 = ["5p25_dMchi-0p5_"]#,"6p0_dMchi-2p0_","52p5_dMchi-5_","60_dMchi-20_"]
-        mass_splitlist2 = ["5 GeV (10%)"]#,"5 GeV (40%)","50 GeV (10%)","50 GeV (40%)"]
+        mass_splitlist1 = ["5p25_dMchi-0p5_","6p0_dMchi-2p0_","52p5_dMchi-5_","60_dMchi-20_"]
+        mass_splitlist2 = ["5 GeV (10%)","5 GeV (40%)","50 GeV (10%)","50 GeV (40%)"]
         lifelist = ["ctau 0p1cm","ctau 1cm","ctau 10cm","ctau 100cm"]
         plots_dicmass = {}
         plots2d_dicmass = {}

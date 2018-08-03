@@ -95,6 +95,8 @@ def drawall(hist1,hist2,hist3,hist4,hist5,key,leglist,pp,sel, leg):
 
 	if "ptmet" in name and sel >= 2:
 		hist1.GetXaxis().SetRangeUser(120,200)	
+	if "ptjet" in name and sel >= 3:
+		hist1.GetXaxis().SetRangeUser(120,200)	
 	#set histogram format
 	hist1.SetLineColor(2)
 	hist2.SetLineColor(3)
@@ -253,8 +255,8 @@ def makehist(events):
 		hist_phi_musub[sel]       = ROOT.TH1F("histphimusub%s"%sel,"gen subleading Mu phi: %s"%cut_sel[sel], 40,-6,6)
 		hist_vxy_musub[sel]       = ROOT.TH1F("histvertexvxymusub%s"%sel,"gen subleading Mu vxy: %s"%cut_sel[sel], 100,0,600)
 		hist_vz_musub[sel]        = ROOT.TH1F("histvertexvzmusub%s"%sel,"gen subleading Mu vz: %s"%cut_sel[sel], 50,-600,600)
-		hist_num_jet[sel]         = ROOT.TH1F("histnumjet%s"%sel,"gen number of mu: %s"%cut_sel[sel], 10,0,10)
-		hist_num_mu[sel]          = ROOT.TH1F("histnummu%s"%sel,"gen number of jets: %s"%cut_sel[sel], 10,0,10)
+		hist_num_jet[sel]         = ROOT.TH1F("histnumjet%s"%sel,"gen number of jets: %s"%cut_sel[sel], 10,0,10)
+		hist_num_mu[sel]          = ROOT.TH1F("histnummu%s"%sel,"gen number of mu: %s"%cut_sel[sel], 10,0,10)
 		hist_dR_mu[sel]           = ROOT.TH1F("histdRmu%s"%sel,"dR: gen leading mu and subleading mu: %s"%cut_sel[sel], 50,0,6)
 		hist_dphi_metmu[sel]      = ROOT.TH1F("histdphimetmu%s"%sel," dPhi: gen MET and leading mu: %s"%cut_sel[sel], 50,0,5)
 		hist_dphi_mumu[sel]       = ROOT.TH1F("histdphimumu%s"%sel," dPhi: gen leading mu and subleading mu: %s"%cut_sel[sel], 50,0,5)
@@ -279,8 +281,8 @@ def makehist(events):
 		hist_phi_musub_rec[sel]   = ROOT.TH1F("histphimusubrec%s"%sel,"reco subleading Mu phi: %s"%cut_sel[sel], 40,-6,6)
 		hist_vxy_musub_rec[sel]   = ROOT.TH1F("histvertexvxymusubrec%s"%sel,"reco subleading Mu vxy: %s"%cut_sel[sel], 100,0,600)
 		hist_vz_musub_rec[sel]    = ROOT.TH1F("histvertexvzmusubrec%s"%sel,"reco subleading Mu vz: %s"%cut_sel[sel], 50,-600,600)
-		hist_num_jet_rec[sel]     = ROOT.TH1F("histnumjetreco%s"%sel,"reco number of mu: %s"%cut_sel[sel], 10,0,10)
-		hist_num_mu_rec[sel]      = ROOT.TH1F("histnummureco%s"%sel,"reco number of jets: %s"%cut_sel[sel], 10,0,10)
+		hist_num_jet_rec[sel]     = ROOT.TH1F("histnumjetreco%s"%sel,"reco number of jets: %s"%cut_sel[sel], 10,0,10)
+		hist_num_mu_rec[sel]      = ROOT.TH1F("histnummureco%s"%sel,"reco number of mu: %s"%cut_sel[sel], 10,0,10)
 		hist_dR_mu_rec[sel]       = ROOT.TH1F("histdRmureco%s"%sel,"dR: reco leading mu and subleading mu: %s"%cut_sel[sel], 50,0,6)
 		hist_dphi_metmu_rec[sel] = ROOT.TH1F("histdphimetmureco%s"%sel," dPhi: reco MET and leading mu: %s"%cut_sel[sel], 50,0,5)
 		hist_dphi_mumu_rec[sel]    = ROOT.TH1F("histdphimumureco%s"%sel," dPhi: reco leading mu and subleading mu: %s"%cut_sel[sel], 50,0,5)
@@ -452,15 +454,31 @@ def makehist(events):
 			if gmutrack.pt() > leadingGenMu_pt:
 				leadingGenSubMu_pt = leadingGenMu_pt
 				leadingGenSubMu_eta =leadingGenMu_eta
-				leadingGenSubMu_phi =leadingGenMu_phi	
+				leadingGenSubMu_phi =leadingGenMu_phi
 				leadingGenSubMu_vxy =leadingGenMu_vxy
 				leadingGenSubMu_vz = leadingGenMu_vz
 				leadingGenMu_pt = gmutrack.pt()
 				leadingGenMu_eta = gmutrack.eta()
+				leadingGenMu_phi = gmutrack.phi()	
+				leadingGenMu_vxy = (float(gmutrack.vx()**2) + float(gmutrack.vy()**2))**(0.5)
+				leadingGenMu_vz = gmutrack.vz()
+			elif (gmutrack.pt() <= leadingGenMu_pt) and (gmutrack.pt() > leadingGenSubMu_pt):
+				leadingGenSubMu_pt = gmutrack.pt()
 				leadingGenSubMu_eta = gmutrack.eta()
-				leadingGenSubMu_phi = gmutrack.phi()
+				leadingGenSubMu_phi = gmutrack.phi()	
 				leadingGenSubMu_vxy = (float(gmutrack.vx()**2) + float(gmutrack.vy()**2))**(0.5)
 				leadingGenSubMu_vz = gmutrack.vz()
+#				leadingGenSubMu_pt = leadingGenMu_pt
+#				leadingGenSubMu_eta =leadingGenMu_eta
+#				leadingGenSubMu_phi =leadingGenMu_phi	
+#				leadingGenSubMu_vxy =leadingGenMu_vxy
+#				leadingGenSubMu_vz = leadingGenMu_vz
+#				leadingGenMu_pt = gmutrack.pt()
+#				leadingGenMu_eta = gmutrack.eta()
+#				#leadingGenSubMu_eta = gmutrack.eta()
+#				leadingGenMu_phi = gmutrack.phi()
+#				leadingGenMu_vxy = (float(gmutrack.vx()**2) + float(gmutrack.vy()**2))**(0.5)
+#				leadingGenMu_vz = gmutrack.vz()
 	#		print "gtrack: ", gtrack.pt(), gtrack.eta()
 			if abs(gmutrack.eta())<2.5 and gmutrack.pt()>3.0:
 				denom_count_reco_mu +=1
@@ -857,4 +875,4 @@ def saveplots(plots_dic,plotseff_dic,plots2d_dic,counts_dic,olist):
 
 
 saveplots(plots_dicmass,plotseff_dicmass,plots2d_dicmass,counts_dicmass,lifelist)
-#saveplots(plots_diclife,plotseff_diclife,plots2d_diclife,counts_diclife,mass_splitlist2)
+saveplots(plots_diclife,plotseff_diclife,plots2d_diclife,counts_diclife,mass_splitlist2)
